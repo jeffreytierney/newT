@@ -4,13 +4,13 @@
   // into the self executing wrapper function
   temp = temp || "newT";
 
-  // internally refer to it as $ for brevity sake
-  var $ = function() {
+  // internally refer to it as T for brevity sake
+  var T = function() {
     this.init();
   }
 
-  $.prototype = {
-    constructor: $.prototype.constructor,
+  T.prototype = {
+    constructor: T.prototype.constructor,
     init: function(data) {
       this.templates = {};
       this.__createMethods();
@@ -65,10 +65,10 @@
 
       var _this = this;
       for(var i=0, len=els.length; i<len; i++) (function(el) {
-        $.prototype[el] = function() {
+        T.prototype[el] = function() {
           var args = Array.prototype.slice.call(arguments);
           args.unshift(el);
-          return $.prototype.__createElGeneric.apply(_this, args);
+          return T.prototype.__createElGeneric.apply(_this, args);
         }
       })(els[i]);
       return this;
@@ -130,5 +130,5 @@
       return el;
     }
   }
-  window[temp] = new $();
+  window[temp] = new T();
 })();
