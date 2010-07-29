@@ -60,7 +60,7 @@
     // list of allowed html elements, and creates a helper function on the prototype
     // to allow easy creation of that element simply by calling its name as a function
     __createMethods: function() {
-      var el_list = "a abbr acronym address applet area b base basefont bdo bgsound big blockquote body br button caption center cite code col colgroup comment custom dd del dfn dir div dl dt em embed fieldset font form frame frameset head hn hr html i iframe img input input type=button input type=checkbox input type=file input type=hidden input type=image input type=password input type=radio input type=reset input type=submit input type=text ins isindex kbd label legend li link listing map marquee menu meta nobr noframes noscript object ol optgroup option p param plaintext pre q rt ruby s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var wbr xml xmp";
+      var el_list = "a abbr acronym address applet area b base basefont bdo bgsound big blockquote body br button caption center cite code col colgroup comment custom dd del dfn dir div dl dt em embed fieldset font form frame frameset head h1 h2 h3 h4 h5 h6 hn hr html i iframe img input input ins isindex kbd label legend li link listing map marquee menu meta nobr noframes noscript object ol optgroup option p param plaintext pre q rt ruby s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var wbr xml xmp";
       var els = el_list.split(" ");
 
       // extra helper for just grouping a bunch together without a specific parent
@@ -114,8 +114,9 @@
 
       for(var i=0, len=content.length; i<len; i++) {
         // if the content is a string, create a Text Node to hold it and append
+        // unless (for now) there are html tags or entities in it... then just innerHTML it
         if(typeof content[i] === "string") {
-          var re = /\<[^\>]+\>/;
+          var re = /\<[^\>]+\>|\&[^ ]+;/;
           if(content[i].match(re)) {
             el.innerHTML += content[i];
           }
