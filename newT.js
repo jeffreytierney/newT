@@ -109,9 +109,16 @@
       }
 
       for(var i=0, len=content.length; i<len; i++) {
+        // if the content is a string, create a Text Node to hold it and append
         if(typeof content[i] === "string") {
-          // if the content is a string, create a Text Node to hold it and append
-          el.appendChild(document.createTextNode(content[i]));
+          var re = /\<[^\>]+\>/;
+          if(content[i].match(re)) {
+            el.innerHTML += content[i];
+          }
+          else {
+            el.appendChild(document.createTextNode(content[i]));
+          }
+
         }
         else if(typeof content[i] === "function") {
           el.appendChild(content[i]());
