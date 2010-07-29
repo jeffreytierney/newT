@@ -63,6 +63,9 @@
       var el_list = "a abbr acronym address applet area b base basefont bdo bgsound big blockquote body br button caption center cite code col colgroup comment custom dd del dfn dir div dl dt em embed fieldset font form frame frameset head hn hr html i iframe img input input type=button input type=checkbox input type=file input type=hidden input type=image input type=password input type=radio input type=reset input type=submit input type=text ins isindex kbd label legend li link listing map marquee menu meta nobr noframes noscript object ol optgroup option p param plaintext pre q rt ruby s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var wbr xml xmp";
       var els = el_list.split(" ");
 
+      // extra helper for just grouping a bunch together without a specific parent
+      els.push("frag");
+
       var _this = this;
       for(var i=0, len=els.length; i<len; i++) (function(el) {
         T.prototype[el] = function() {
@@ -82,7 +85,8 @@
     //                       can be strings, domElements, or anything that evaluates to either of those
     __createElGeneric: function(type, attributes, content) {
       var args = Array.prototype.slice.call(arguments).slice(1);
-      var el = document.createElement(type);
+
+      var el = (type==="frag" ? document.createDocumentFragment() : document.createElement(type));
       if(args.length) {
         content = args;
       }
