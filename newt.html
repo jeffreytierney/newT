@@ -1,0 +1,57 @@
+<html>
+<head>
+  <script type="text/javascript" src="newT.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+    var data = {
+      links:[
+        {href:"http://knowmore.com", text:"knowmore"},
+        {href:"http://twitter.com", text:"twitter"},
+        {href:"http://facebook.com", text:"facebook"}
+      ],
+      title: "These are some links"
+    };
+
+    //var t = new T();
+    newT.save("test", function(data) {with(newT) { return (
+      // Begin Template
+        blockquote(
+          div({id:"hi"},
+            data.title,
+            each_render(data.links, "link"),
+            ul({clss: "link_ul", id: "my_ul"},
+              each_render(data.links, "another")
+            ),
+            each(data.links, function(data) { return (
+              p(data.href)
+            );})
+          )
+        )
+      // End emplate
+      )};
+    });
+
+    newT.save("link", function(data) {with(newT) { return (
+        p(
+          a({href: data.href, clss: "mylinkclass"},
+            data.text
+          )
+        )
+      )};
+    });
+
+    newT.save("another", function(data) {return (
+        newT.li(
+          newT.a({href: data.href, clss: "mylinkclass"},
+            data.text
+          )
+        )
+      );
+    });
+
+    newT.render("test", data, document.body);
+</script>
+</body>
+</html>
