@@ -119,11 +119,15 @@
 
       if(attributes) {
         for(attr in attributes) {
-          if(attr === "clss") {
-            el.className = attributes[attr];
-          }
-          else {
-            el.setAttribute(attr, attributes[attr]);
+          switch(attr) {
+            case "clss":
+              el.className = attributes[attr];
+              break;
+            case "style":
+              el.cssText = el.style.cssText = attributes[attr];
+              break;
+            default:
+              el.setAttribute(attr, attributes[attr]);
           }
         }
       }
@@ -140,6 +144,9 @@
             el.appendChild(document.createTextNode(content[i]));
           }
 
+        }
+        else if (typeof content[i] === "number") {
+          el.appendChild(document.createTextNode(content[i]));
         }
         else if(typeof content[i] === "function") {
           el.appendChild(content[i]());
