@@ -24,22 +24,38 @@
     // create the elements for the template
     // and if an exisiting root el was passed in, append it to that root
     // either way, return the newly created element(s)
-    render: function(name, data, el) {
-      var new_el = this.templates[name](data);
+    render: function(name, data, opts) {
+      opts = opts || {};
+      opts.scope = opts.scope || null;
+      opts.data = data;
 
-      if(el) {
-        el.appendChild(new_el);
+      // if a preprocessing function is specified in the options, call it
+      // use either the specified scope, or the default of null (set earlier)
+      // params
+      if (opts.preData) { opts.data = opts.preData.call(opts.scope, opts.data); }
+      if (opts.pre) { var ret = opts.pre.call(opts.scope, opts.data); }
+
+      var new_el = this.templates[name](opts.data);
+
+      if(opts.el) {
+        opts.el.appendChild(new_el);
       }
+
+      // if a posprocessing function is specified in the options, call it
+      // use either the specified scope, or the default of null (set earlier)
+      if (opts.post) { opts.post.call(opts.scope, new_el, opts.data); }
       return new_el;
     },
     // function to iterate over a collection and render a template
     // for each item in the collection
     // uses a document fragment to collect each element and pass it back
-    each_render: function(data, template) {
+    each_render: function(data, template, opts) {
+      opts = opts || {};
       var frag = document.createDocumentFragment();
+      opts.el = frag;
       for(var i in data) {
         if(data.hasOwnProperty(i)) {
-          this.render(template, data[i], frag);
+          this.render(template, data[i], opts);
         }
       }
       return frag;
