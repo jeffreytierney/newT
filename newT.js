@@ -46,10 +46,20 @@
       if (opts.post) { opts.post.call(opts.scope, new_el, opts.data); }
       return new_el;
     },
+    renderToString: function(name, data, opts) {
+      opts = opts || {};
+      delete opts.el;
+
+      var el = document.createElement("div");
+      el.appendChild(this.render(name, data, opts));
+
+      return el.innerHTML;
+
+    },
     // function to iterate over a collection and render a template
     // for each item in the collection
     // uses a document fragment to collect each element and pass it back
-    each_render: function(data, template, opts) {
+    eachRender: function(data, template, opts) {
       opts = opts || {};
       var frag = document.createDocumentFragment();
       opts.el = frag;
