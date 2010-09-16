@@ -22,11 +22,11 @@
 
     newT.save("all_tweets", function(data) {with(newT) {return (
         ul({id: "tweetbox"},
-          each_render(data, "tweet")
+          eachRender(data, "tweet")
         )
       )};
     });
-    newT.render("all_tweets", data, document.body);
+    newT.render("all_tweets", data, {el:document.body});
 </script>
 </body>
 </html>
