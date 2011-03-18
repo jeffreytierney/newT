@@ -5,26 +5,41 @@
   temp = temp || "newT";
 
   // internally refer to it as T for brevity sake
-  var T = function() {
-    this.init();
+  var T = function(options) {
+    this.init(options || {});
   }
 
   T.prototype = {
     constructor: T.prototype.constructor,
-    init: function(data) {
+    init: function(options) {
+      this.options = options;
       this.templates = {};
       this.__createMethods();
       return this;
     },
     // simple function to save the passed in template
     save: function(name, template) {
-      this.templates[name] = template;
+      var name_parts = name.split(".");
+      var ns = "global";
+      name = name_parts[0];
+      if(name_parts.length > 1) {
+        ns = name_parts[1];
+      }
+      if(!this.templates.hasOwnProperty(ns)) { this.templates[ns] = {}; }
+      this.templates[ns][name] = template;
       return this;
     },
     // create the elements for the template
     // and if an exisiting root el was passed in, append it to that root
     // either way, return the newly created element(s)
     render: function(name, data, opts) {
+      var name_parts = name.split(".");
+      var ns = "global";
+      name = name_parts[0];
+      if(name_parts.length > 1) {
+        ns = name_parts[1];
+      }
+      
       opts = opts || {};
       opts.scope = opts.scope || null;
       opts.data = data;
@@ -35,7 +50,7 @@
       if (opts.preData) { opts.data = opts.preData.call(opts.scope, opts.data); }
       if (opts.pre) { var ret = opts.pre.call(opts.scope, opts.data); }
 
-      var new_el = this.templates[name](opts.data);
+      var new_el = this.templates[ns][name](opts.data);
 
       if(opts.el) {
         opts.el.appendChild(new_el);
@@ -74,10 +89,13 @@
     // rendering function to be evaluated for each item in the collection
     // uses a document fragment to collect each element and pass it back
     each: function(data, func) {
-      var frag = document.createDocumentFragment();
+      var frag = document.createDocumentFragment(), child;
       for(var i in data) {
         if(data.hasOwnProperty(i)) {
-          frag.appendChild(func(data[i]));
+          child = func(data[i]);
+          if(child) {
+            frag.appendChild(child);
+          }
         }
       }
       return frag;
@@ -86,15 +104,17 @@
     // list of allowed html elements, and creates a helper function on the prototype
     // to allow easy creation of that element simply by calling its name as a function
     __createMethods: function() {
-      var el_list = "a abbr acronym address applet area b base basefont bdo bgsound big blockquote body br button caption center cite code col colgroup comment custom dd del dfn dir div dl dt em embed fieldset font form frame frameset head h1 h2 h3 h4 h5 h6 hn hr html i iframe img input input ins isindex kbd label legend li link listing map marquee menu meta nobr noframes noscript object ol optgroup option p param plaintext pre q rt ruby s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var wbr xml xmp";
+      //var el_list = "a abbr acronym address applet area b base basefont bdo bgsound big blockquote body br button caption center cite code col colgroup comment custom dd del dfn dir div dl dt em embed fieldset font form frame frameset head h1 h2 h3 h4 h5 h6 hn hr html i iframe img input input ins isindex kbd label legend li link listing map marquee menu meta nobr noframes noscript object ol optgroup option p param plaintext pre q rt ruby s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var wbr xml xmp video audio";
+      var el_list = "a abbr address area article aside audio b base bdi bdo blockquote body br button canvas caption cite code col colgroup command datalist dd del details device dfn div dl dt em embed fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup hr html i iframe img input ins kbd keygen label legend li link map mark menu meta meter nav noscript object ol optgroup option output p param pre progress q rp rt ruby s samp script section select small source span strong style sub summary sup table tbody td textarea tfoot th thead time title tr track ul var video wbr"
       var els = el_list.split(" ");
 
       // extra helper for just grouping a bunch together without a specific parent
       els.push("frag");
 
+      var prefix = this.options.prefix || "";
       var _this = this;
       for(var i=0, len=els.length; i<len; i++) (function(el) {
-        T.prototype[el] = function() {
+        T.prototype[prefix+el] = function() {
           var args = Array.prototype.slice.call(arguments);
           args.unshift(el);
           return T.prototype.__createElGeneric.apply(_this, args);
@@ -166,6 +186,21 @@
         }
       }
       return el;
+    },
+    // If you want another separate instance of newT, perhaps to keep its own template management
+    // call newT.clone() and it will return another freshly initialized copy (with a clear templates object)
+    clone: function() {
+      return new T();
+    },
+    // want to write plugin elements that can do more than just render dom elements?
+    // such as dom elements that have some extra processing or ajax requests related to their rendering
+    // extend the core newT prototype with this method.
+    extend: function(name, func, force) {
+      if(!(name in T.prototype) || force) {
+        T.prototype[name] = func;
+        return true;
+      }
+      return false;
     }
   }
   window[temp] = new T();
