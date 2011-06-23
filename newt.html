@@ -26,7 +26,14 @@
         )
       )};
     });
-    newT.render("all_tweets", data, {el:document.body});
+    var start = +new Date();
+    var i=1;
+    while(i--) newT.render("all_tweets", data, {el:document.body});
+    var end = +new Date();
+    
+    console.log(end-start);
+    
+    
 </script>
 </body>
 </html>

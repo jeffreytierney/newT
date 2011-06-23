@@ -211,10 +211,13 @@
       }
 
       if(attributes) {
+        if("when" in attributes && !attributes.when) { el = null; return ""; }
+        
         for(attr in attributes) {
-          switch(attr) {
+          switch(attr.toLowerCase()) {
             case "clss":
-              el.className = attributes[attr];
+            case "classname":
+              el.className = (attributes[attr].join ? attributes[attr].join(" ") : attributes[attr]);
               break;
             case "style":
               el.cssText = el.style.cssText = attributes[attr];
@@ -239,10 +242,10 @@
         switch(typeof content[i]) {
             case "string":
             if(content[i].match(regex_pattern)) {
-              el.innerHTML += content[i];
+              el.innerHTML += (this.options.safe_mode ? this.escapeHTML(content[i]) : content[i]);
             }
             else {
-              el.appendChild(document.createTextNode(content[i]));
+              el.appendChild(document.createTextNode((this.options.safe_mode ? this.escapeHTML(content[i]) : content[i])));
             }            
             break;
           
@@ -262,7 +265,25 @@
       }
       return el;
     },
-    
+    // method to escape potentially unsafe_html.. will convert any chars that may enable script injection to their
+    // html entity equivalent
+    escapeHTML: function( unsafe_html ) {
+        return (unsafe_html && unsafe_html.replace(/&/mg, "&amp;").replace(/"/mg, "&quot;").replace(/'/mg, "&#39;")
+                     .replace(/>/mg, "&gt;").replace(/</mg, "&lt;") ) || "";
+    },
+    setOption: function(key, val){
+      if (typeof key === "object") {
+        for (var _key in key) { this.options[_key] = key[_key]; }
+      }
+      else { 
+        this.options[key] = val;
+      }
+      return this;
+    },
+    safeMode: function(on) {
+      this.options["safe_mode"] = !!on; 
+      return this;
+    },
     // If you want another separate instance of newT, perhaps to keep its own template management
     // call newT.clone() and it will return another freshly initialized copy (with a clear templates object)
     clone: function() {
