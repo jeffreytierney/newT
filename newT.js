@@ -144,13 +144,13 @@
     // function to iterate over a collection and render a template
     // for each item in the collection
     // uses a document fragment to collect each element and pass it back
-    eachRender: function(data, template, opts) {
+    eachRender: function(data, template_name, opts) {
       opts = opts || {};
       var frag = document.createDocumentFragment();
       opts.el = frag;
       for(var i in data) {
         if(data.hasOwnProperty(i)) {
-          this.render(template, data[i], opts);
+          this.render(template_name, data[i], opts);
         }
       }
       return frag;
