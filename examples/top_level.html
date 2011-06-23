@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+        <title>Top_level</title>
+        
+    </head>
+    <body>
+        <script type="text/javascript" charset="utf-8" src="../newT.js"></script>
+        <script type="text/javascript" charset="utf-8">
+            
+            
+            
+newT.save("top_level", function(d) {
+    return (
+        newT.div("one"),
+        newT.div("two")
+    )
+})
+        
+var nodes = newT.render("top_level", {});
+console.log(nodes, "just the 'two' div here");
+document.body.appendChild( nodes );
+        </script>
+    </body>
+</html>
