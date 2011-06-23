@@ -162,11 +162,11 @@
       var frag = document.createDocumentFragment(), child, idx=0;
       for(var i in data) {
         if(data.hasOwnProperty(i)) {
-          idx+=1;
           child = func(data[i], idx);
           if(child) {
             frag.appendChild(child);
           }
+          idx+=1;
         }
       }
       return frag;
