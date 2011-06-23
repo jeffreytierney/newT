@@ -39,10 +39,20 @@ In order to properly render a template, the saved value must return a
 single root node. Such as the above hello world, this will not work,
 however
 
-newT.save("wont_work", function() {
-    return (
-        newT.div("one"),
-        newT.div("two")
-    )
-})
+    newT.save("wont_work", function() {
+        return (
+            newT.div("one"),
+            newT.div("two")
+        )
+    });
+
+Instead, we need to wrap the return response in an array, which will
+wrap the elements in a Docuemnt Fragment
+
+    newT.save("top_level", function(d) {
+        return ([
+            newT.div("one"),
+            newT.div("two")
+        ])
+    });
 
