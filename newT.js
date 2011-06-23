@@ -218,6 +218,8 @@
       }
 
       if(attributes) {
+        // when is not an attribute... but can accept a test case that can be used for conditional rendering
+        // if it evaluates to true, the node will be rendered... if not, rendering will be short-circuited and an empty string will be returned
         if("when" in attributes && !attributes.when) { el = null; return ""; }
         
         for(attr in attributes) {
@@ -248,12 +250,7 @@
         // unless (for now) there are html tags or entities in it... then just innerHTML it
         switch(typeof content[i]) {
             case "string":
-            if(content[i].match(regex_pattern)) {
-              el.innerHTML += (this.options.safe_mode ? this.escapeHTML(content[i]) : content[i]);
-            }
-            else {
-              el.appendChild(document.createTextNode((this.options.safe_mode ? this.escapeHTML(content[i]) : content[i])));
-            }            
+                this.addText(el, content[i]);
             break;
           
             case "number":
@@ -261,7 +258,13 @@
             break;
           
             case "function":
-                el.appendChild(content[i]());
+                var result = content[i]();
+                if(typeof result == "string") {
+                  this.addText(el, result);
+                }        
+                else {  
+                  el.appendChild(result);
+                }
             break;
             
             default:
@@ -271,6 +274,15 @@
         }
       }
       return el;
+    },
+    addText: function(el, text) {
+      if(text.match(regex_pattern)) {
+        el.innerHTML += (this.options.safe_mode ? this.escapeHTML(text) : text);
+      }
+      else {
+        el.appendChild(document.createTextNode((this.options.safe_mode ? this.escapeHTML(text) : text)));
+      }
+      return this;
     },
     // method to escape potentially unsafe_html.. will convert any chars that may enable script injection to their
     // html entity equivalent
@@ -287,7 +299,9 @@
       }
       return this;
     },
+    // when safe mode is set to on, any strings 
     safeMode: function(on) {
+      if(typeof on == "undefined") { on = true; }
       this.options["safe_mode"] = !!on; 
       return this;
     },
