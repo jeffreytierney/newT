@@ -141,7 +141,7 @@
       return el.innerHTML;
 
     },
-    // function to iterate over a collection and render a template
+    // function to iterate over a collection and render a previously saved template
     // for each item in the collection
     // uses a document fragment to collect each element and pass it back
     eachRender: function(data, template_name, opts) {
