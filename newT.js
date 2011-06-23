@@ -113,6 +113,8 @@
       if (opts.preData) { opts.data = opts.preData.call(opts.scope, opts.data); }
       if (opts.pre) { var ret = opts.pre.call(opts.scope, opts.data); }
       
+      this.cur_options = opts;
+      
       new_el = this.templates[ns][name](opts.data);
       if(typeof new_el === "object" && new_el.length > 0) {
         var _new_el=new_el.slice(0);
@@ -129,6 +131,8 @@
       // if a posprocessing function is specified in the options, call it
       // use either the specified scope, or the default of null (set earlier)
       if (opts.post) { opts.post.call(opts.scope, new_el, opts.data); }
+      
+      this.cur_options = null;
       return new_el;
     },
     renderToString: function(name, data, opts) {
@@ -158,7 +162,9 @@
     // more free form iterator function that allows passing an ad-hoc
     // rendering function to be evaluated for each item in the collection
     // uses a document fragment to collect each element and pass it back
-    each: function(data, func) {
+    each: function(data, func, opts) {
+      opts = opts || {};
+      this.cur_options = opts;
       var frag = document.createDocumentFragment(), child, idx=0;
       for(var i in data) {
         if(data.hasOwnProperty(i)) {
@@ -169,6 +175,7 @@
           idx+=1;
         }
       }
+      this.cur_options = null;
       return frag;
     },
     // function that gets called in initializing the class... loops through
@@ -277,10 +284,10 @@
     },
     addText: function(el, text) {
       if(text.match(regex_pattern)) {
-        el.innerHTML += (this.options.safe_mode ? this.escapeHTML(text) : text);
+        el.innerHTML += (this.isSafeMode() ? this.escapeHTML(text) : text);
       }
       else {
-        el.appendChild(document.createTextNode((this.options.safe_mode ? this.escapeHTML(text) : text)));
+        el.appendChild(document.createTextNode((this.isSafeMode() ? this.escapeHTML(text) : text)));
       }
       return this;
     },
@@ -304,6 +311,10 @@
       if(typeof on == "undefined") { on = true; }
       this.options["safe_mode"] = !!on; 
       return this;
+    },
+    isSafeMode: function() {
+      if (this.cur_options && "safe_mode" in this.cur_options) { return !!this.cur_options.safe_mode; }
+      return !!this.options.safe_mode
     },
     // If you want another separate instance of newT, perhaps to keep its own template management
     // call newT.clone() and it will return another freshly initialized copy (with a clear templates object)
