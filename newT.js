@@ -112,8 +112,15 @@
       // params
       if (opts.preData) { opts.data = opts.preData.call(opts.scope, opts.data); }
       if (opts.pre) { var ret = opts.pre.call(opts.scope, opts.data); }
-
+      
       new_el = this.templates[ns][name](opts.data);
+      if(typeof new_el === "object" && new_el.length > 0) {
+        var _new_el=new_el.slice(0);
+        new_el=document.createDocumentFragment();
+        for(var i in _new_el) {
+            new_el.appendChild( _new_el[i] );
+        }
+      }
 
       if(opts.el) {
         opts.el.appendChild(new_el);

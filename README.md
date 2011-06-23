@@ -30,3 +30,19 @@ See this snippet:  examples/helloworld.html
     // later in your code
     var dom_node = newT.render("my_template", my_data );
     document.body.appendChild(dom_node);
+
+
+Rendering Templates
+======
+
+In order to properly render a template, the saved value must return a
+single root node. Such as the above hello world, this will not work,
+however
+
+newT.save("wont_work", function() {
+    return (
+        newT.div("one"),
+        newT.div("two")
+    )
+})
+
