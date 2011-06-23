@@ -1,0 +1,32 @@
+newT
+====
+
+Simple JavaScript templating.
+
+
+Using newT is simple, just include newT.js, and start managing the DOM in a convenient and reusuable way.
+
+
+Usage
+====
+Using newT is quick and easy, it's similar to HTML nesting, but allows for easier injection of 
+dynamic data such as AJAX responses, or responding to user interaction.
+
+
+Hello World, a nested node
+=======
+
+See this snippet:  examples/helloworld.html
+
+    var my_data={ foo : "hello world" }
+    newT.save("my_template", function(t_data){
+        return (
+            newT.div("My first newT, simple JS template",
+                newT.div(t_data.foo)
+            )
+        )
+    });
+
+    // later in your code
+    var dom_node = newT.render("my_template", my_data );
+    document.body.appendChild(dom_node);

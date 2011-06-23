@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+        <title>Hello world with newT</title>
+        
+    </head>
+    <body>
+
+
+        <script type="text/javascript" charset="utf-8" src="../newT.js"></script>
+        <script type="text/javascript" charset="utf-8">
+
+            var my_data={ foo : "newT hello world", bar : "w00t!" }
+            newT.save("my_template", function(t_data){
+                return (
+                    newT.div({clss : "outerdiv" }, "My first newT, simple JS template ", 
+                        newT.div( {clss : "innerdiv1" }, t_data.foo ), // note this comma
+                        newT.div(t_data.bar)
+                    )
+                )
+            });
+
+            // later in your code
+            // demonstrates simple node nesting, .innerdiv1 is a  child of outer div
+            document.body.appendChild( newT.render("my_template", my_data ) );
+
+        </script>
+    </body>
+</html>
