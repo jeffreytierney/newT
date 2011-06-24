@@ -227,7 +227,10 @@
       if(attributes) {
         // when is not an attribute... but can accept a test case that can be used for conditional rendering
         // if it evaluates to true, the node will be rendered... if not, rendering will be short-circuited and an empty string will be returned
-        if("when" in attributes && !attributes.when) { el = null; return ""; }
+        if("when" in attributes){
+          if(!attributes.when) { el = null; return ""; }
+          else { delete attributes.when; }
+        } 
         
         for(attr in attributes) {
           switch(attr.toLowerCase()) {
