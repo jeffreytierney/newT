@@ -16,6 +16,35 @@ body {
     width:420px;
     padding:0 10px;
 }
+.user_profile {
+    float:left;
+    margin-right:5px;
+}
+.user_meta {
+    float:left;
+    width:300px;
+}
+.single_tweet_box {
+    margin:3px 0 10px;
+}
+.single_tweet_box h4 {
+    margin-bottom:4px;
+}
+.single_tweet_box a {
+    text-decoration:none;
+    color:#333;
+}
+.single_tweet_box h3 {
+    font-weight:normal;
+    font-size:13px;
+}
+.tweet_time {
+    color:#999;
+    font-size:11px;
+    margin:5px 0;
+}
+.hr { clear:both; float:none; }
+.hr hr { display:none; }
     </style>
     
 </head>
@@ -31,7 +60,7 @@ body {
 
     <script type="text/javascript" charset="utf-8">
         $(function(){
-            newt_twitter.show( $("#tweets_column").get(0), "gregory80", 10 );
+            newt_twitter.show( $("#tweets_column").get(0), "gregory80", 20 );
                 
         })
     </script>

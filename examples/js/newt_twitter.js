@@ -44,15 +44,27 @@
         dom_tweet : function() {
             
             newT.save("single_tweet", function(tweet) {
+                var profile_url =  "http://twitter.com/" + tweet.user.screen_name;
                 return (
-                  newT.div(
-                    newT.div({},
-                        newT.img({src : tweet.user.profile_image_url})
+                  newT.div({clss : "single_tweet_box"},
+                    newT.div({ clss : "user_profile" },
+                        newT.a({href : profile_url},
+                            newT.img({src : tweet.user.profile_image_url})
+
+                        )
                     ),
-                    newT.div({},
-                        newT.h4(tweet.screen_name),
-                        newT.h3(tweet.text)
-                    )
+                    newT.div({ clss : "user_meta" },
+                        newT.h4({}, 
+                            newT.a({href : profile_url}, tweet.user.screen_name )
+                        ),
+                        newT.h3({}, tweet.text),
+                        newT.div({ clss : "tweet_time" },
+                            newT.div(tweet.created_at)
+                        )
+
+                    ),
+                    newT.div({clss : "hr"}, newT.hr())
+
                 ))
             });
 
