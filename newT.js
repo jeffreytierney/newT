@@ -286,6 +286,7 @@
       return el;
     },
     addText: function(el, text) {
+      // might be able to just do text node instead of escape html
       if(text.match(regex_pattern)) {
         el.innerHTML += (this.isSafeMode() ? this.escapeHTML(text) : text);
       }
@@ -297,8 +298,11 @@
     // method to escape potentially unsafe_html.. will convert any chars that may enable script injection to their
     // html entity equivalent
     escapeHTML: function( unsafe_html ) {
-        return (unsafe_html && unsafe_html.replace(/&/mg, "&amp;").replace(/"/mg, "&quot;").replace(/'/mg, "&#39;")
+      return (unsafe_html && document.createTextNode(unsafe_html).nodeValue ) || "";
+      /*
+        return (unsafe_html && unsafe_html.replace(/&/mg, "&amp;").replace(/\"/mg, "&quot;").replace(/'/mg, "&#39;")
                      .replace(/>/mg, "&gt;").replace(/</mg, "&lt;") ) || "";
+      */
     },
     setOption: function(key, val){
       if (typeof key === "object") {

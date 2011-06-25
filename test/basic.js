@@ -37,9 +37,9 @@ test("clone", function() {
 });
 
 test("escapeHtml", function() {
-  var str = '<script type="text/javascript">alert("hi");</script>',
+  var str = '<script type="text/javascript">alert(\'hi\');</script>',
       escaped = newT.escapeHTML(str),
-      should_equal = "&lt;script type=&quot;text/javascript&quot;&gt;alert(&quot;hi&quot;);&lt;/script&gt;";
+      should_equal = "&lt;script type=&quot;text/javascript&quot;&gt;alert(&#39;hi&#39;);&lt;/script&gt;";
   
   expect(5)
   ok(escaped.indexOf("<") < 0, "there should be no less than characters left");
@@ -84,5 +84,23 @@ test("newT.save()", function() {
   notEqual(newT.templates["global"]["ul_test"], newT.templates["test_local"]["ul_test"], "passed templates were different, so saved templates should be different")
   
   newT = newT.clone();
+});
+
+test("safeMode", function() {
+  var str = '<script type="text/javascript">alert(\'hi\');</script>',
+      should_equal = "&lt;script type=&quot;text/javascript&quot;&gt;alert(&#39;hi&#39;);&lt;/script&gt;";
+
+  expect(3)
+
+  var p_unsafe = newT.p(str);
+  newT.safeMode();
+  var p_safe = newT.p(str);
+  newT.safeMode(false);
+  var p_unsafe_2 = newT.p(str);
+  
+  equal(p_unsafe.innerHTML, str, "html text should be added unescaped BEFORE safe mode is triggered");
+  equal(p_safe.innerHTML, should_equal, "html text should be escaped AFTER safe mode is triggered");
+  equal(p_unsafe.innerHTML, str, "html text should be added unescaped again  AFTER safe mode is turned off");
+  
 });
 
