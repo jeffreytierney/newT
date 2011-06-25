@@ -24,7 +24,6 @@
                 promise=self.remote( username, count );
 
             promise.done(function(data){
-                console.log("argrs", arguments);
                 newT.render(self.templates.box, data, {
                     "el" : el
                 });
