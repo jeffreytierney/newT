@@ -1,3 +1,6 @@
+//TODO: test each, eachRender, when, extend, passing multiple pieces of content to an element
+// frags, and using an array as the top level implicit frag generator
+
 module("basic");
 
 test("createEmptyElement", function() {
@@ -17,6 +20,34 @@ test("createElementWithText", function() {
   ok(p.innerHTML == str, "innerHTML match");
   ok(p.childNodes.length == 1, "1 child node");
   ok(p.constructor == document.createElement("p").constructor, "p constructor");
+});
+
+test("createElementWithAttributes", function() {
+  expect(8);
+  var str = "This is a paragraph element",
+      attr = {
+        clss:"my_class_name",
+        id: "my_id",
+        "style": "position: absolute; top: 0px; left: 0px;",
+        "data-field": "my_data_field",
+        "foo": "bar"
+      },
+      p = newT.p(attr, str);
+  ok(p.innerHTML == str, "innerHTML match");
+  equals(attr["id"], p.id, "make sure id is set properly");
+  equals(attr["clss"], p.className, "make sure css ClassName is set properly (using clss)");
+  equals(attr["style"], (p.cssText || p.style.cssText), "make sure inline style attribute is set properly");
+  equals(attr["data-field"], p.getAttribute("data-field"), "make sure html5 data attribute is set properly");
+  equals(attr["foo"], p.getAttribute("foo"), "make sure random attribute is set properly");
+  
+  attr = {classname:"another_class_name"};
+  p = newT.p(attr, str);
+  equals(attr["classname"], p.className, "make sure css ClassName is set properly (using classname)");
+  
+  attr = {classname:["class1", "class2", "class3"]};
+  p = newT.p(attr, str);
+  equals("class1 class2 class3", p.className, "make sure css ClassName is set properly (using an array)");
+  
 });
 
 
@@ -72,6 +103,40 @@ test("newT.save()", function() {
   
   newT = newT.clone();
 });
+
+
+test("newT.render()", function() {
+  var template = function(data) { return (
+    newT.ul(
+      newT.li(newT.a({clss:"class1", href:"#1"},"one")), 
+      newT.li(newT.a({classname:"class2", href:"#2"},"two")), 
+      newT.li(newT.a({clss: ["class3"], href:"#3"},"three"))
+    )
+  )};
+
+  
+  newT.save("ul_test", template);
+  var ul = newT.render("ul_test");
+  expect(17);
+  
+  ok(ul.constructor == document.createElement("ul").constructor, "ul constructor");
+  ok(ul.childNodes.length == 3, "ul has 3 child nodes");
+  for(var i=0, len=ul.childNodes.length; i<len; i++) {
+    var li = ul.childNodes[i];
+    ok(li.constructor == document.createElement("li").constructor, "li constructor " + i);
+    ok(li.childNodes.length == 1, "each li has 1 child nodes");
+
+    var a = li.childNodes[0];
+    
+    equals(a.constructor, document.createElement("a").constructor, "a constructor");
+    equals(a.getAttribute("href"), "#"+(i+1), "check that href attribute is set properly on a");
+    equals(a.className, "class"+(i+1), "check that class attribute is set properly on a");
+    
+  }
+
+  newT = newT.clone();
+});
+
 
 test("safeMode", function() {
   var str = '<a href="#" onmouseover="alert(document.cookie)">hi</a>';
@@ -140,5 +205,5 @@ test("safeModeAttributeOverride", function() {
   var p_unsafe = newT.p({"_safe":false}, str);
   equal(p_unsafe.firstChild.nodeType, 1, "attribute safe mode (off) method is triggered  which should override global (on),  innerHTML should be used on html string and first child is nodeType == 1");
 
-
+  newT = newT.clone();
 });
