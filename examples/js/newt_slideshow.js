@@ -107,6 +107,7 @@
 
         photo_loaded : function(e, elem, photo_info) {
             var self=this;
+            
             self.loading-=1;
             elem.setAttribute("width", elem.naturalWidth || elem.width );
             elem.setAttribute("height", elem.naturalHeight || elem.height );
@@ -175,8 +176,13 @@ function out( str, options ) {
     window.newt_slideshow=new nS();
 })(window);
 
+
+
+
 /*
 *  showControls.js
+*
+*
 *
 * */
 (function(window, undefined){
@@ -210,7 +216,7 @@ function out( str, options ) {
             this.current().fadeIn('normal');
         },
         transition_complete : function( pos ) {
-            console.log("finished")
+            console.log("finished");
         },
         change_photo : function( incr ) {
             if(active_transition) { return; }
@@ -222,10 +228,11 @@ function out( str, options ) {
 
             active_transition=true;
             $curr.fadeOut();
-
+            // if the number is position, forward
             if(Math.abs(incr) === incr) {
                 num = ($imgs.length > pos+incr ) ? pos+incr : 0
             } else {
+                // the incr is negative, backward
                 num=(pos+incr >= 0 ) ? pos+incr : $imgs.length-1;
             }
 
