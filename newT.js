@@ -74,7 +74,12 @@
     constructor: T.prototype.constructor,
     version : "1.1.1.1",
     init: function(options) {
-      this.options = options;
+      this.options = {
+        if_attr: "when",
+        local_safe: "_safe",
+        safe_mode: false
+      };
+      for(var opt in options) { this.options[opt] = options[opt]; }
       this.templates = {};
       this.__createMethods();
       return this;
@@ -217,7 +222,7 @@
         return el;
       }
 
-      if (args[0].toString() === "[object Object]") {
+      if (args[0] && args[0].toString() === "[object Object]") {
         attributes = content.shift();
       }
       else {
@@ -227,10 +232,17 @@
       if(attributes) {
         // when is not an attribute... but can accept a test case that can be used for conditional rendering
         // if it evaluates to true, the node will be rendered... if not, rendering will be short-circuited and an empty string will be returned
-        if("when" in attributes){
-          if(!attributes.when) { el = null; return ""; }
-          else { delete attributes.when; }
+        // when is now just the default value for if_attr... this can be overridden using setOption()
+        var _local_safe_mode;
+        if(this.options.if_attr in attributes){
+          if(!attributes[this.options.if_attr]) { el = null; return ""; }
+          else { delete attributes[this.options.if_attr]; }
         } 
+        if(this.options.local_safe in attributes) { 
+          _local_safe_mode = !!attributes[this.options.local_safe]; 
+          delete attributes[this.options.local_safe];
+        }
+        
         
         for(attr in attributes) {
           switch(attr.toLowerCase()) {
@@ -260,7 +272,7 @@
         // unless (for now) there are html tags or entities in it... then just innerHTML it
         switch(typeof content[i]) {
             case "string":
-                this.addText(el, content[i]);
+                this.addText(el, content[i], _local_safe_mode);
             break;
           
             case "number":
@@ -270,13 +282,14 @@
             case "function":
                 var result = content[i]();
                 if(typeof result == "string") {
-                  this.addText(el, result);
+                  this.addText(el, result, _local_safe_mode);
                 }        
                 else {  
                   el.appendChild(result);
                 }
             break;
-            
+            case "undefined":
+                break;
             default:
                 el.appendChild(content[i]);
             break;
@@ -285,24 +298,14 @@
       }
       return el;
     },
-    addText: function(el, text) {
-      // might be able to just do text node instead of escape html
-      if(text.match(regex_pattern)) {
-        el.innerHTML += (this.isSafeMode() ? this.escapeHTML(text) : text);
+    addText: function(el, text, _local_safe_mode) {
+      if(!this.isSafeMode(_local_safe_mode) && text.match(regex_pattern)) {
+        el.innerHTML = text;
       }
       else {
-        el.appendChild(document.createTextNode((this.isSafeMode() ? this.escapeHTML(text) : text)));
+        el.appendChild(document.createTextNode(text));
       }
       return this;
-    },
-    // method to escape potentially unsafe_html.. will convert any chars that may enable script injection to their
-    // html entity equivalent
-    escapeHTML: function( unsafe_html ) {
-      return (unsafe_html && document.createTextNode(unsafe_html).nodeValue ) || "";
-      /*
-        return (unsafe_html && unsafe_html.replace(/&/mg, "&amp;").replace(/\"/mg, "&quot;").replace(/'/mg, "&#39;")
-                     .replace(/>/mg, "&gt;").replace(/</mg, "&lt;") ) || "";
-      */
     },
     setOption: function(key, val){
       if (typeof key === "object") {
@@ -319,7 +322,8 @@
       this.options["safe_mode"] = !!on; 
       return this;
     },
-    isSafeMode: function() {
+    isSafeMode: function(_local_safe_mode) {
+      if(typeof _local_safe_mode != "undefined") { return !!_local_safe_mode; }
       if (this.cur_options && "safe_mode" in this.cur_options) { return !!this.cur_options.safe_mode; }
       return !!this.options.safe_mode
     },
