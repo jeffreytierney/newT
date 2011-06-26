@@ -9,9 +9,22 @@
     var nS = function() {
         this.init();
         return this;
-    }
+    }, 
+    
+    evt_listen=[]; // a list of evt types and methods to trigger
+    
     nS.prototype = {
         loading : 0,
+        bind_types : "load complete",
+        bind : function(type, func) {
+            evt_listen.push( {
+                evt : type,
+                method : func
+            });
+        },
+        unbind : function( type ) {
+            //TODO complete unbind by looping over evt_listen
+        },
         meta : {
             url : "http://api.flickr.com/services/rest/"
             //http://api.flickr.com/services/rest/?method=flickr.photos.search&text=kitten&format=json&api_key=c8a8e577657c47d24c7835a563a05a00&media=photos&per_page=10&jsoncallback=foo
@@ -60,31 +73,49 @@
         templates : {
             photo : "sng_photo_box"
         },
-        start : function( elem, term ) {
+        start : function( $elem, term ) {
             var self=this, dfr=$.Deferred();
             var promise = self.search( term || "cute kitten" );
+            $elem.append( newT.render("slideshow_box", function(){} ) );
+
             promise.done( function(data) {
-                self.dom_add_photos(elem, data);
+                var frag = self.dom_add_photos(data);
+                $(".outer_slideshow").append( frag );
                 dfr.resolve(data);
             });
             return dfr.promise();
         },
-        dom_add_photos : function( elem, data ) {
+        dom_add_photos : function( data ) {
             var self=this,
                 photos=self.parse_photos( data );
-
+            self.photo_load_start( photos.length );
             self.loading=photos.length;
-            newT.render("slideshow_box", photos, {
-                el : elem 
-            });
+            return newT.eachRender( photos, self.templates.photo );
         },
 
         dom_outer_box : function() {
             var self=this;
             newT.save("slideshow_box", function(data){
-                return (newT.div({clss : "outer_slideshow"},
-                            newT.eachRender( data, self.templates.photo )
-                       ))
+                var $w=$(window), h=$w.height()/2, w=$w.width()/2
+                return ([
+                    newT.div({clss : "outer_bg_showbox" },
+                        newT.div({clss : "bg_showbox" } ) 
+                    ),
+                    newT.div({
+                        clss : "outer_slideshow",
+                        style : "top:" + (h) + "px;left:" + (w) + "px;"
+                    }),
+                    newT.div({
+                        clss : "slideshow_loader",
+                        style : "width:200px;height:200px;top:" + (h-100) + "px;left:" + (w-100) + "px;",
+                    },
+                            newT.img({
+                                src : "graphics/black_64_preloader.gif",
+                                width : 64,
+                                height:64,
+                                border:0
+                            }))
+                ])
             });
         },
         parse_photos : function( data ) {
@@ -104,7 +135,8 @@
             return photos;
             
         },
-
+        photo_load_start : function() {
+        },
         photo_loaded : function(e, elem, photo_info) {
             var self=this;
             
@@ -132,6 +164,7 @@
                     )
                 )
             });
+            delete self;
         },
         dom_photo : function(data) {
             var self=this;
@@ -204,6 +237,11 @@ function out( str, options ) {
         loader : function( bool ) {
             // see if loader exists
             // show/hide it
+            if(bool) {
+                $(".slideshow_loader").show();
+            } else {
+                $(".slideshow_loader").hide();
+            }
         },
 
         listen: function() {
@@ -213,7 +251,16 @@ function out( str, options ) {
         },
         
         start : function() {
-            this.current().fadeIn('normal');
+            var self=this;
+            $(".outer_bg_showbox").fadeIn('fast', function(){
+                // TODO, bring up the box
+                var $curr=self.current();
+                self.loader(false);
+                self.display_box( $curr );
+                $curr.fadeIn('normal', function(){
+                });
+            
+            });
         },
         transition_complete : function( pos ) {
             console.log("finished");
@@ -227,21 +274,38 @@ function out( str, options ) {
                 num=0;
 
             active_transition=true;
-            $curr.fadeOut();
-            // if the number is position, forward
+                        // if the number is position, forward
             if(Math.abs(incr) === incr) {
                 num = ($imgs.length > pos+incr ) ? pos+incr : 0
             } else {
                 // the incr is negative, backward
                 num=(pos+incr >= 0 ) ? pos+incr : $imgs.length-1;
             }
-
-            $imgs.eq( num ).fadeIn('slow', function(){
+            var $next= $imgs.eq( num );
+            this.display_box( $next  );
+            $curr.fadeOut();
+            $next.fadeIn('slow', function(){
                 active_transition=false;
                 self.transition_complete( pos+incr );
             });
         
         },
+        
+        display_box : function( el ) {
+            var $next=el;
+            var $w=$(window);
+            var next_w=$next.width();
+            var next_h=$next.height();
+            $(".outer_slideshow").animate({
+                width : next_w,
+                height : next_h,
+                opacity : 1,
+                left : Math.round(($w.width()/2) - (next_w/2)),
+                top : Math.round((($w.height()-20)/2) - ((next_h)/2)) || 0
+            });
+        
+        },
+
         all : function() {
             return $(".sng_photo_box img");
         },
