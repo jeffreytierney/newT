@@ -1,36 +1,54 @@
 /*
-*   newt_slideshow.js
+*   slidesT.js
 *
-*
+*   events:
+*       photo_load
+*       (the latest loaded photo)
 * */
 
 (function(window, undefined) {
     
     var nS = function() {
         this.init();
+        this.evt_listen=[];
         return this;
-    }, 
+    };
     
-    evt_listen=[]; // a list of evt types and methods to trigger
     
     nS.prototype = {
         loading : 0,
-        bind_types : "load complete",
-        bind : function(type, func) {
-            evt_listen.push( {
-                evt : type,
-                method : func
+        evt_listen : [],
+        bind_types : "photo_load complete",
+        bind : function(type, func, scope ) {
+            var self=this;
+            self.evt_listen.push( {
+                "type" : type,
+                method : func,
+                "scope" : scope || self
             });
         },
         unbind : function( type ) {
-            //TODO complete unbind by looping over evt_listen
+            var self=this,
+                evts=self.evt_listen;
+
+            for(var i=0; i<evts.length; i++) {
+                if( evts[i].type === type) {
+                    evts.splice(i,1);
+                }
+            }
+        },
+        trigger : function( type ) {
+            var self=this,
+                evts=self.evt_listen;
+            for(var i=0; i<evts.length; i++) {
+                if(evts[i].type === type ) {
+                    var args = Array.prototype.slice.call(arguments, 1);
+                    evts[i].method.apply(evts[i].scope||self, args );
+                }
+            }
         },
         meta : {
             url : "http://api.flickr.com/services/rest/"
-            //http://api.flickr.com/services/rest/?method=flickr.photos.search&text=kitten&format=json&api_key=c8a8e577657c47d24c7835a563a05a00&media=photos&per_page=10&jsoncallback=foo
-            //http://www.flickr.com/services/api/misc.urls.html
-            //http://farm{farm-id}.static.flickr.com/{server-id}/{id}_{secret}_[mstzb].jpg
-            
         },
         photo_url : function( options ) {
             var url="http://farm%{farm}.static.flickr.com/%{server}/%{id}_%{secret}_%{size}.jpg";
@@ -135,23 +153,33 @@
             return photos;
             
         },
+
+        /*
+        *
+        * Events
+        *
+        * */
         photo_load_start : function() {
         },
         photo_loaded : function(e, elem, photo_info) {
             var self=this;
-            
             self.loading-=1;
             elem.setAttribute("width", elem.naturalWidth || elem.width );
             elem.setAttribute("height", elem.naturalHeight || elem.height );
             elem.className=elem.className + " loaded_complete";
+
+            self.trigger("photo_load", elem, photo_info);
+
             if(self.loading===0){
-                self.photo_load_complete();
+                self.photo_load_complete.call(self);
             }
             delete self;
         },
+
+        
         // EVENT, override
         photo_load_complete : function() {
-            console.log("photos done");
+            this.trigger("complete");
         },
 
         // newT can work easily with JS Img Objects
@@ -191,6 +219,10 @@
             return dfr.promise();
         },
 
+        clone : function() {
+            return new nS();
+        },
+
         extend : function( name, cmnd ) {
             nS.prototype[name]=cmnd;
             return this;
@@ -206,7 +238,7 @@ function out( str, options ) {
     return str;
 }
 
-    window.newt_slideshow=new nS();
+    window.slidesT=new nS();
 })(window);
 
 
@@ -225,6 +257,7 @@ function out( str, options ) {
     }, active_transition=false;
     sC.prototype = {
         key : {
+            SPACE : 32,
             LEFT : 37,
             UP : 38,
             RIGHT : 39,
@@ -296,12 +329,14 @@ function out( str, options ) {
             var $w=$(window);
             var next_w=$next.width();
             var next_h=$next.height();
+            var left_px=Math.max( 0, Math.round( ($w.width()/2) - next_w/2  ) );
+            var top_px=Math.max( 0, Math.round( ($w.height()-20)/2 ) - next_h/2 );
             $(".outer_slideshow").animate({
                 width : next_w,
                 height : next_h,
                 opacity : 1,
-                left : Math.round(($w.width()/2) - (next_w/2)),
-                top : Math.round((($w.height()-20)/2) - ((next_h)/2)) || 0
+                left : left_px,
+                top : top_px
             });
         
         },
@@ -334,13 +369,16 @@ function out( str, options ) {
                 switch(e.keyCode) {
                     case self.key.LEFT:
                         e.preventDefault();
-                        console.log("left arrow");
                         self.change_photo(-1);
+                    break;
+
+                    case self.key.SPACE:
+                        e.preventDefault();
+                        self.change_photo(1);
                     break;
 
                     case self.key.RIGHT:
                         e.preventDefault();
-                        console.log("right arrow");
                         self.change_photo(1);
                     break;
                 }

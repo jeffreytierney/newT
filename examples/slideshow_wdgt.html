@@ -3,7 +3,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
     <title>Slideshow_wdgt</title>
-    <link rel="stylesheet" href="css/newt_slideshow.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="css/slidesT.css" type="text/css" media="screen" charset="utf-8">
 </head>
 <body>
 
@@ -14,20 +14,26 @@
     <script type="text/javascript" charset="utf-8" src="../newT.js"></script>
     <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
     <script type="text/javascript" charset="utf-8"
-        src="js/newt_slideshow.js"></script>
+        src="js/slidesT.js"></script>
 
     <script type="text/javascript" charset="utf-8">
         $(function(){
-            newt_slideshow.photo_load_complete = function() {
-                console.log("move control over here!");
-                var $curr=$(".sng_photo_box img:visible");
-                if($curr.length <=0 ){
-                    showControls.start();
-                }
-            }
-
-            var promise = newt_slideshow.start( $("#middle")  );
+            // Insert the Loader and Frame
+            // makes a call to get photos
+            // returns jQuery deferred promise
+            slidesT.bind("complete", function(){
+                console.log("yeah")
+                showControls.start();
+                
+            });
+            slidesT.bind("photo_load", function() {
+                console.log(arguments);
+                })
+            console.log(slidesT.evt_listen);
+            var promise = slidesT.start( $("#middle")  );
             promise.done(function() {
+                // the DOM photos are added
+                // add some events, this could come later
                 showControls.listen();
             })
         });
