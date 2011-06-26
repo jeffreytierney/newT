@@ -3,7 +3,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
     <title>Slideshow_wdgt</title>
-    
+    <link rel="stylesheet" href="css/newt_slideshow.css" type="text/css" media="screen" charset="utf-8">
 </head>
 <body>
 
@@ -18,8 +18,10 @@
 
     <script type="text/javascript" charset="utf-8">
         $(function(){
-            newt_slideshow.start( $("#middle").get(0)  );
-                
+            var promise = newt_slideshow.start( $("#middle").get(0)  );
+            promise.done(function() {
+                showControls.listen();
+                })
         });
     </script> 
 </body>
