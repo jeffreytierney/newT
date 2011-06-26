@@ -15,6 +15,7 @@
     };
     
     
+    // newT Slides
     nS.prototype = {
         loading : 0,
         evt_listen : [],
@@ -47,11 +48,14 @@
                 }
             }
         },
+
         meta : {
-            url : "http://api.flickr.com/services/rest/"
+            url : "http://api.flickr.com/services/rest/",
+            p_url : "http://farm%{farm}.static.flickr.com/%{server}/%{id}_%{secret}_%{size}.jpg"
         },
+
         photo_url : function( options ) {
-            var url="http://farm%{farm}.static.flickr.com/%{server}/%{id}_%{secret}_%{size}.jpg";
+            var url=this.meta.p_url;
             return out( url, options );
         },
 
@@ -65,9 +69,10 @@
         // returns deferred promise (aka a callback);
         search : function( txt ) {
             var self=this, dfr=$.Deferred(), promise;
-            var params=$.extend(true, {}, self.remote_setup, { text : txt } );
-            
-            promise = self.remote( self.meta.url, params );
+            if(txt) {
+                self.remote_setup.text=txt;
+            }
+            promise = self.remote( self.meta.url, self.remote_setup );
             promise.done( dfr.resolve );
             
             return dfr.promise();
@@ -78,6 +83,7 @@
             method : "flickr.photos.search",
             format : "json",
             per_page : 10,
+            page:1,
             license : "",
             text : "cute kitten",
             api_key : "c8a8e577657c47d24c7835a563a05a00",
@@ -103,6 +109,19 @@
             });
             return dfr.promise();
         },
+
+        add_page : function( callback ) {
+            var self=this;
+            self.remote_setup.page+=1;
+            var promise = self.search();
+            promise.done( function(data) {
+                var frag = self.dom_add_photos(data);
+                $(".outer_slideshow").append( frag );
+                callback && callback(data);
+            });
+            delete self;
+        },
+
         dom_add_photos : function( data ) {
             var self=this,
                 photos=self.parse_photos( data );
@@ -182,7 +201,11 @@
             this.trigger("complete");
         },
 
-        // newT can work easily with JS Img Objects
+        // newT can work easily with JS Img Objecta
+        // s
+        dom_clear : function() {
+            $(".outer_slideshow").empty();
+        },
         dom_photo_template : function() {
             var self=this;
             newT.save(self.templates.photo, function(data){

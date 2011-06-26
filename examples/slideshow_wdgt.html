@@ -22,13 +22,20 @@
             // makes a call to get photos
             // returns jQuery deferred promise
             slidesT.bind("complete", function(){
-                console.log("yeah")
                 showControls.start();
+                slidesT.unbind("complete");
+                slidesT.unbind("photo_load");
+                var cnt=0;
+                slidesT.add_page( function() {
+                    cnt+=1;
+                    if(cnt > 8 ) { return; }
+                    slidesT.add_page(arguments.callee);
+                });
                 
             });
             slidesT.bind("photo_load", function() {
-                console.log(arguments);
-                })
+                // TODO, display loading info
+            });
             console.log(slidesT.evt_listen);
             var promise = slidesT.start( $("#middle")  );
             promise.done(function() {
