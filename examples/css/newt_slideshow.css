@@ -36,4 +36,7 @@ h6 {
     top:0;
     left:0;
 }
+.unloaded_img {
+    display:none;
+}
 

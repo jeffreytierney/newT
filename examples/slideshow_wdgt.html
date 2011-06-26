@@ -18,10 +18,15 @@
 
     <script type="text/javascript" charset="utf-8">
         $(function(){
+            newt_slideshow.photo_load_complete = function() {
+                console.log("move control over here!");
+                showControls.start();
+            }
+
             var promise = newt_slideshow.start( $("#middle").get(0)  );
             promise.done(function() {
                 showControls.listen();
-                })
+            })
         });
     </script> 
 </body>
