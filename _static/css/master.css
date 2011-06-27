@@ -1,0 +1,18 @@
+* { margin:0; padding:0; }
+body {
+    font-family:Arial, sans-serif;
+    font-size:13px;
+}
+
+#container {
+    width:420px;
+    margin:0 auto;
+}
+.main_content p {
+    font-size:16px;
+    line-height:1.5em;
+    margin:8px 0 15px;
+}
+#top {
+    margin:15px 0 30px;
+}
