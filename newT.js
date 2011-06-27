@@ -271,20 +271,21 @@
         }
       }
       
+      var c;
       for(var i=0, len=content.length; i<len; i++) {
         // if the content is a string, create a Text Node to hold it and append
         // unless (for now) there are html tags or entities in it... then just innerHTML it
-        switch(typeof content[i]) {
+        c = content[i];
+        switch(typeof c) {
             case "string":
-                this.addText(el, content[i], _local_safe_mode);
+                this.addText(el, c, _local_safe_mode);
             break;
             
             case "number":
-                el.appendChild(document.createTextNode(content[i]));
+                el.appendChild(document.createTextNode(c));
             break;
-            
             case "function":
-                var result = content[i]();
+                var result = c();
                 if(typeof result == "string") {
                   this.addText(el, result, _local_safe_mode);
                 }
@@ -295,7 +296,7 @@
             case "undefined":
                 break;
             default:
-                el.appendChild(content[i]);
+                try{ el.appendChild(c); } catch(ex) { el.appendChild(document.createTextNode(c)); }
             break;
         
         }
