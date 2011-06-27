@@ -74,7 +74,12 @@
     constructor: T.prototype.constructor,
     version : "1.1.1.1",
     init: function(options) {
-      this.options = options;
+      this.options = {
+        if_attr: "when",
+        local_safe: "_safe",
+        safe_mode: false
+      };
+      for(var opt in options) { this.options[opt] = options[opt]; }
       this.templates = {};
       this.__createMethods();
       return this;
@@ -112,8 +117,17 @@
       // params
       if (opts.preData) { opts.data = opts.preData.call(opts.scope, opts.data); }
       if (opts.pre) { var ret = opts.pre.call(opts.scope, opts.data); }
-
-      new_el = this.templates[ns][name](opts.data);
+      
+      this.cur_options = opts;
+      
+      new_el = this.templates[ns][name](opts.data, opts._i, opts._idx);
+      if(typeof new_el === "object" && new_el.length > 0) {
+        var _new_el=new_el.slice(0);
+        new_el=document.createDocumentFragment();
+        for(var i in _new_el) {
+            new_el.appendChild( _new_el[i] );
+        }
+      }
 
       if(opts.el) {
         opts.el.appendChild(new_el);
@@ -122,6 +136,8 @@
       // if a posprocessing function is specified in the options, call it
       // use either the specified scope, or the default of null (set earlier)
       if (opts.post) { opts.post.call(opts.scope, new_el, opts.data); }
+      
+      this.cur_options = null;
       return new_el;
     },
     renderToString: function(name, data, opts) {
@@ -134,16 +150,20 @@
       return el.innerHTML;
 
     },
-    // function to iterate over a collection and render a template
+    // function to iterate over a collection and render a previously saved template
     // for each item in the collection
     // uses a document fragment to collect each element and pass it back
-    eachRender: function(data, template, opts) {
+    eachRender: function(data, template_name, opts) {
+      // dont set cur_options here because that happens in render
       opts = opts || {};
-      var frag = document.createDocumentFragment();
+      if(!this.checkRender(opts)) { return ""; }
+      var frag = document.createDocumentFragment(), idx=0;
       opts.el = frag;
       for(var i in data) {
         if(data.hasOwnProperty(i)) {
-          this.render(template, data[i], opts);
+          opts["_i"] = i;
+          opts["_idx"] = idx++;
+          this.render(template_name, data[i], opts);
         }
       }
       return frag;
@@ -151,18 +171,26 @@
     // more free form iterator function that allows passing an ad-hoc
     // rendering function to be evaluated for each item in the collection
     // uses a document fragment to collect each element and pass it back
-    each: function(data, func) {
+    each: function(data, func, opts) {
+      opts = opts || {};
+      if(!this.checkRender(opts)) { return ""; }
+      this.cur_options = opts;
       var frag = document.createDocumentFragment(), child, idx=0;
       for(var i in data) {
         if(data.hasOwnProperty(i)) {
-          idx+=1;
-          child = func(data[i], idx);
+          child = func(data[i], i, idx);
           if(child) {
             frag.appendChild(child);
           }
+          idx+=1;
         }
       }
+      this.cur_options = null;
       return frag;
+    },
+    checkRender: function(opts) {
+      if(this.options.if_attr in opts && !opts[this.options.if_attr]) { return false; }
+      return true;
     },
     // function that gets called in initializing the class... loops through
     // list of allowed html elements, and creates a helper function on the prototype
@@ -203,7 +231,7 @@
         return el;
       }
 
-      if (args[0].toString() === "[object Object]") {
+      if (args[0] && args[0].toString() === "[object Object]") {
         attributes = content.shift();
       }
       else {
@@ -211,7 +239,18 @@
       }
 
       if(attributes) {
-        if("when" in attributes && !attributes.when) { el = null; return ""; }
+        // when is not an attribute... but can accept a test case that can be used for conditional rendering
+        // if it evaluates to true, the node will be rendered... if not, rendering will be short-circuited and an empty string will be returned
+        // when is now just the default value for if_attr... this can be overridden using setOption()
+        var _local_safe_mode;
+        if(!this.checkRender(attributes)){ el = null; return "";}
+        delete attributes[this.options.if_attr];
+        
+        if(this.options.local_safe in attributes) { 
+          _local_safe_mode = !!attributes[this.options.local_safe]; 
+          delete attributes[this.options.local_safe];
+        }
+        
         
         for(attr in attributes) {
           switch(attr.toLowerCase()) {
@@ -241,12 +280,7 @@
         // unless (for now) there are html tags or entities in it... then just innerHTML it
         switch(typeof content[i]) {
             case "string":
-            if(content[i].match(regex_pattern)) {
-              el.innerHTML += (this.options.safe_mode ? this.escapeHTML(content[i]) : content[i]);
-            }
-            else {
-              el.appendChild(document.createTextNode((this.options.safe_mode ? this.escapeHTML(content[i]) : content[i])));
-            }            
+                this.addText(el, content[i], _local_safe_mode);
             break;
           
             case "number":
@@ -254,9 +288,16 @@
             break;
           
             case "function":
-                el.appendChild(content[i]());
+                var result = content[i]();
+                if(typeof result == "string") {
+                  this.addText(el, result, _local_safe_mode);
+                }        
+                else {  
+                  el.appendChild(result);
+                }
             break;
-            
+            case "undefined":
+                break;
             default:
                 el.appendChild(content[i]);
             break;
@@ -265,11 +306,14 @@
       }
       return el;
     },
-    // method to escape potentially unsafe_html.. will convert any chars that may enable script injection to their
-    // html entity equivalent
-    escapeHTML: function( unsafe_html ) {
-        return (unsafe_html && unsafe_html.replace(/&/mg, "&amp;").replace(/"/mg, "&quot;").replace(/'/mg, "&#39;")
-                     .replace(/>/mg, "&gt;").replace(/</mg, "&lt;") ) || "";
+    addText: function(el, text, _local_safe_mode) {
+      if(!this.isSafeMode(_local_safe_mode) && text.match(regex_pattern)) {
+        el.innerHTML = text;
+      }
+      else {
+        el.appendChild(document.createTextNode(text));
+      }
+      return this;
     },
     setOption: function(key, val){
       if (typeof key === "object") {
@@ -280,9 +324,16 @@
       }
       return this;
     },
+    // when safe mode is set to on, any strings 
     safeMode: function(on) {
+      if(typeof on == "undefined") { on = true; }
       this.options["safe_mode"] = !!on; 
       return this;
+    },
+    isSafeMode: function(_local_safe_mode) {
+      if(typeof _local_safe_mode != "undefined") { return !!_local_safe_mode; }
+      if (this.cur_options && "safe_mode" in this.cur_options) { return !!this.cur_options.safe_mode; }
+      return !!this.options.safe_mode
     },
     // If you want another separate instance of newT, perhaps to keep its own template management
     // call newT.clone() and it will return another freshly initialized copy (with a clear templates object)
@@ -298,7 +349,16 @@
         return true;
       }
       return false;
+    },
+    noConflict: function(new_name) {
+      new_name = new_name || "__newT";
+      try{delete window[_last_name];}catch(ex){window[_last_name] = undefined;}
+      window[temp] = _old_newt;
+      window[new_name] = _temp;
+      _last_name = new_name;
+      
     }
   }
-  window[temp] = new T();
+  var _old_newt = window[temp], _temp, _last_name = temp;
+  window[temp] = _temp = new T();
 })();

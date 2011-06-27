@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+        <title>Each_render</title>
+        
+    </head>
+    <body>
+        <h1>newT.eachRender Example</h1>
+<script type="text/javascript" charset="utf-8" src="../newT.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var a_list=[{
+        foo : "one"
+    },{
+        foo : "two"
+    },{
+        foo : "three"
+    }];
+
+
+newT.save("items_list", function(data){
+    return (
+        newT.li(data.foo + " - yey!")
+    )
+
+});
+
+newT.save("a_list", function(data){
+        return newT.ul( {clss : "a_list_class"},
+        newT.eachRender( data, "items_list")
+    )
+});
+
+document.body.appendChild( newT.render("a_list", a_list) )
+
+</script>
+    </body>
+</html>

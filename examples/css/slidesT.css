@@ -1,0 +1,87 @@
+/*
+ *  newt_slideshow.css
+ *
+ * */
+
+* { margin:0; padding:0; }
+body, input, textarea {
+    font-family:Arial,sans-serif;
+    font-size:13px;
+    color:#ccc;
+    background:black;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-family:Georgia;
+}
+h1 {
+    font-size:23px;
+}
+h2 {
+    font-size:18px;
+}
+h3 {
+    font-size:18px;
+    font-weight:normal;
+},
+h4, h5 {
+    font-size:15px;
+}
+h5 {
+    font-weight:normal;
+}
+h6 {
+    font-weight:normal;
+    font-size:16px;
+}
+.outer_bg_showbox {
+    position:fixed;
+    bottom:0;
+    right:0;
+    width:100%;
+    height:100%;
+    display:block;
+    background:#000;
+    opacity:.7;
+    display:none;
+}
+.bg_showbox {
+    width:100%:
+    height:100%;
+    
+}
+.outer_slideshow {
+    background:white;
+    position:fixed;
+    padding:10px;
+    border-radius:6px;
+    opacity:0;
+}
+.sng_photo_box {
+    position:absolute;
+    top:10px;
+    left:10px;
+}
+.sng_photo_box img {
+}
+.slideshow_loader {
+    width:200px;
+    height:200px;
+    border-radius:6px;
+    text-align:center;
+    position:fixed;
+}
+.slideshow_loader img {
+    margin-top:30px;
+}
+#show_loading_txt {
+    padding-top:20px;
+    color:#ccc;
+}
+.unloaded_img {
+    display:none;
+}
+
+.slideShowHeaderBox {
+    position:absolute;
+}
+

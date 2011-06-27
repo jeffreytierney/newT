@@ -12,10 +12,10 @@
             
             
 newT.save("top_level", function(d) {
-    return (
+        return ([
         newT.div("one"),
         newT.div("two")
-    )
+        ])
 })
         
 var nodes = newT.render("top_level", {});

@@ -1,0 +1,55 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <title>Slideshow_wdgt</title>
+    <link rel="stylesheet" href="css/slidesT.css" type="text/css" media="screen" charset="utf-8">
+</head>
+<body>
+
+    <div id="middle">
+        
+    </div>
+
+    <script type="text/javascript" charset="utf-8" src="../newT.js"></script>
+    <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8"
+        src="js/slidesT.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(function(){
+            // Insert the Loader and Frame
+            // makes a call to get photos
+            // returns jQuery deferred promise
+            slidesT.bind("complete", function(){
+                showControls.start();
+                slidesT.unbind("complete");
+                slidesT.unbind("photo_load");
+                var cnt=0;
+                setTimeout(function(){
+
+                slidesT.add_page( function() {
+                    cnt+=1;
+                    if(cnt > 5 ) { return; }
+                    slidesT.add_page(arguments.callee);
+                });
+
+
+                }, 5000); // wait 5 seconds for animations to play
+                
+            });
+            slidesT.bind("photo_load", function() {
+                // TODO, display loading info
+                showControls.loader_update();
+            });
+            // kick it all off
+            var promise = slidesT.start( $("#middle"), "cute kitten"  );
+            promise.done(function() {
+                // the DOM photos are added
+                // add some events, this could come later
+                showControls.listen();
+            })
+        });
+    </script> 
+</body>
+</html>

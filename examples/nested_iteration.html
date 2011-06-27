@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+        <title>Nested_iteration</title>
+    </head>
+    <body>
+        <h1>newT.nested_iteration Example</h1>
+
+
+<script type="text/javascript" charset="utf-8" src="../newT.js"></script>
+<script type="text/javascript" charset="utf-8">
+
+    theData= {
+        names: ["3 week average (daily)", "Daily totals"] ,
+        dataArray: [
+            {date: 1303405200000,
+                total: 2342340,
+                       values:{
+                    "3 week average (daily)": 282349234,
+                    "Daily totals" : 120238322
+                }
+            },
+            {date: 1303318800000,
+                total: 0,
+                       values:{
+                    "3 week average (daily)": 282234234,
+                    "Daily totals" : 128893422
+                }
+            },
+            {date: 1303232400000,
+                total: 1490820,
+                       values:{
+                    "3 week average (daily)": 232449234,
+                    "Daily totals" : 290232324
+                }
+            },
+            {date: 1303146000000,
+                total: 3820880,
+                values:{
+                    "3 week average (daily)": 275669234,
+                    "Daily totals" : 120298322
+                }
+            }
+        ]
+    }
+
+     newT.save("full_table", function(data) {
+        var theNames = data.names;
+     return (
+         // Begin Outer Template
+         newT.table( {border:1},
+             newT.tbody(
+                newT.tr(
+                    //each table will have these two columns, so hard code them
+                    newT.th("Date"),
+                    newT.th("Total"),
+                    //iterate over the titles of the dataset for column headers
+                    newT.each(data.names, function(name){
+                        return newT.th(name);
+                   })
+                ),
+                //insert a row for each set of the data
+                newT.each(data.dataArray, function(dataItem) {
+                var _dataItem = dataItem;
+                 return (
+                 // Begin Inner Template
+                 newT.frag(
+                    newT.tr(
+                        newT.td( new Date(dataItem.date).toString()),
+                        newT.td(dataItem.total),
+                        ("values" in dataItem ? newT.each(theNames, function(name){
+                            return newT.td(_dataItem["values"][name] || "-");
+                        }) : "") //looks a bit gnarly, but all this is doing is inserting a new cell into the table for each number in our data
+                    )
+                 )
+                 // End Inner Template
+             );})
+            )
+        )
+             // End Outer Template
+
+     );});
+
+
+document.body.appendChild( newT.render("full_table", theData));
+ </script>
+     </body>
+ </html>
