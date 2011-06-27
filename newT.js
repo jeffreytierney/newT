@@ -358,7 +358,7 @@
       window[temp] = _old_newt;
       window[new_name] = _temp;
       _last_name = new_name;
-      
+      return this;
     }
   }
   var _old_newt = window[temp], _temp, _last_name = temp;
