@@ -409,12 +409,14 @@ test("eachRender", function() {
   
 });
 
-test("extend", function() {
-  expect(8);
+test("extend global", function() {
+  expect(13);
   
   ok(!("extension" in newT), "Make sure that the extension we are trying to add is not there to begin with");
+  var T1 = newT.clone();
   
   var extended = newT.extend("extension", function(attributes, content) {
+    
     var args = Array.prototype.slice.call(arguments);
     var attributes = {};
     if (args[0].toString() === "[object Object]") { // if the first arg is an object, its attributes
@@ -448,7 +450,72 @@ test("extend", function() {
   extended = newT.extend("extension", function(attributes, content) {}, true);
   ok(extended, "extend should return true when successfully extending (in this case, method name exists and force IS specified)");
   
-  newT = newT.clone();
+  var T2 = newT.clone();
+  ok(("extension" in T1), "globally extended methods will show up even on clones that were created before the extension since global extend adds to prototype");
+  
+  ok(("extension" in T2), "cloning after a global extension should return a new object that has extended methods on the prototype");
+  
+  delete newT.constructor.prototype["extension"];
+
+  ok(!("extension" in newT), "Deleting a method from one prototype should remove from all objects based on that prototype");
+  ok(!("extension" in T1), "Deleting a method from one prototype should remove from all objects based on that prototype");
+  ok(!("extension" in T2), "Deleting a method from one prototype should remove from all objects based on that prototype");
+
+
+});
+
+test("extend local", function() {
+  expect(12);
+  
+  ok(!("extension" in newT), "Make sure that the extension we are trying to add is not there to begin with");
+  var T1 = newT.clone();
+  
+  var extended = newT.extend("extension", function(attributes, content) {
+    
+    var args = Array.prototype.slice.call(arguments);
+    var attributes = {};
+    if (args[0].toString() === "[object Object]") { // if the first arg is an object, its attributes
+      attributes = args.shift();
+    }
+  
+    var content = "I am the content: ";
+    args.unshift(content);
+  
+    attributes.href = "#somelink";
+    args.unshift(attributes);
+  
+    var a = this.a.apply(this, args);
+    
+    return a;
+  }, true, true);
+  
+  ok(extended, "extend should return true when successfully extending");
+  ok(("extension" in newT), "Make sure that the extension is now there in the current newT object");
+  ok(!("extension" in newT.constructor.prototype), "Make sure that the extension is not in the prototype");
+  
+  var ext = newT.extension({href:"#someotherlink"},"more content");
+  
+  equals(ext.constructor, document.createElement("a").constructor, "the extension is returning a link, so check the constructor on the returned object");
+  equals(ext.innerHTML, "I am the content: more content", "the extension should have default content, plus the content added in at call time");
+  equals(ext.getAttribute("href"), "#somelink", "Make sure that the href is set to the default specified in the extension");
+  
+  extended = newT.extend("extension", function(attributes, content) {}, false, true);
+  ok(!extended, "extend should return false when unsuccessfully extending (in this case, method name exists and force not specified)");
+
+  extended = newT.extend("extension", function(attributes, content) {}, true, true);
+  ok(extended, "extend should return true when successfully extending (in this case, method name exists and force IS specified)");
+  
+  var T2 = newT.clone();
+  ok(!("extension" in T1), "locally extended methods will NOT show up on clones that were created before the extension");
+  
+  ok(!("extension" in T2), "locally extended methods will ALSO NOT show up on clones that were created after the extension");
+  
+  delete newT["extension"];
+
+  ok(!("extension" in newT), "Deleting a method from the object should remove it");
+
+  
+
 });
 
 test("multiple pieces of content being passed to elements", function() {

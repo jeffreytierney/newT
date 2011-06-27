@@ -339,14 +339,22 @@
     // want to write plugin elements that can do more than just render dom elements?
     // such as dom elements that have some extra processing or ajax requests related to their rendering
     // extend the core newT prototype with this method.
-    extend: function(name, func, force) {
-      if(!(name in T.prototype) || force) {
-        T.prototype[name] = func;
-        return true;
+    extend: function(name, func, force, local) {
+      if(local) {
+        if(!this.hasOwnProperty(name) || force) {
+          this[name] = func;
+          return true;
+        }
+      }
+      else {
+        if(!(name in T.prototype) || force) {
+          T.prototype[name] = func;
+          return true;
+        }
       }
       return false;
     },
-    addEls: function(els, force) {
+    addEls: function(els, force, local) {
       if(typeof els === "string") { els = els.split(" "); }
       var _this = this;
       for(var i=0, len=els.length; i<len; i++) (function(el) {
@@ -354,7 +362,7 @@
           var args = Array.prototype.slice.call(arguments);
           args.unshift(el);
           return T.prototype.element.apply(_this, args);
-        }, force);
+        }, force, local);
       })(els[i]);
       return this;
     },
