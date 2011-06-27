@@ -1,4 +1,4 @@
-//TODO: test each, eachRender, extend, passing multiple pieces of content to an element
+//TODO: test passing multiple pieces of content to an element
 // frags, and using an array as the top level implicit frag generator
 
 module("basic");
@@ -302,5 +302,113 @@ test("each", function() {
     i++;
   }
 
+    newT = newT.clone();
   
+});
+
+test("eachRender", function() {
+  
+  expect(20)
+  
+  var arr = ["one", "two", "three", "four", "five"];
+  
+  newT.save("each_render_example_array", function(data) {
+    return (
+      newT.ul(
+        newT.eachRender(data, "each_render_example_array_li")
+      )
+    )
+  });
+  
+  newT.save("each_render_example_array_li", function(count, idx) {
+    return (
+      newT.li(idx,". ", count)
+    )
+  });
+  
+  var ul = newT.render("each_render_example_array", arr);
+  
+  equals(ul.constructor, document.createElement("ul").constructor, "ul is created as a unordered list element");
+  equals(ul.childNodes.length, arr.length, "ul should have one child element for each element of the array");
+  
+  for (var i=0, len=arr.length; i<len; i++) {
+    var li = ul.childNodes[i];
+    equals(li.constructor, document.createElement("li").constructor, "each list item is created as a list item");
+    equals(li.innerHTML, i+". "+arr[i], "each list item should have the text from one of the spots of the array in it");
+  }
+
+  var obj = {one: "first", two: "second", three: "third"};
+  
+  newT.save("each_render_example_object", function(data) {
+    return (
+      newT.ul(
+        newT.eachRender(data, "each_render_example_object_li")
+      )
+    )
+  });
+
+  newT.save("each_render_example_object_li", function(count, key) {
+    return (
+      newT.li(key, ". ", count)
+    )
+  });
+  
+  
+  ul = newT.render("each_render_example_object", obj);
+  
+  equals(ul.constructor, document.createElement("ul").constructor, "ul is created as a unordered list element");
+  equals(ul.childNodes.length, 3, "ul should have one child element for each element of the object");
+  
+  i = 0;
+  for (var key in obj) {
+    var li = ul.childNodes[i];
+    equals(li.constructor, document.createElement("li").constructor, "each list item is created as a list item");
+    equals(li.innerHTML, key+". "+obj[key], "each list item should have the text from one of the spots of the object in it");
+    i++;
+  }
+
+  newT = newT.clone();
+  
+});
+
+test("extend", function() {
+  expect(8);
+  
+  ok(!("extension" in newT), "Make sure that the extension we are trying to add is not there to begin with");
+  
+  var extended = newT.extend("extension", function(attributes, content) {
+    var args = Array.prototype.slice.call(arguments);
+    var attributes = {};
+    if (args[0].toString() === "[object Object]") { // if the first arg is an object, its attributes
+      attributes = args.shift();
+    }
+  
+    var content = "I am the content: ";
+    args.unshift(content);
+  
+    attributes.href = "#somelink";
+    args.unshift(attributes);
+  
+    var a = this.a.apply(this, args);
+    
+    return a;
+  });
+  
+  ok(extended, "extend should return true when successfully extending");
+  
+  ok(("extension" in newT), "Make sure that the extension is now there in the prototype");
+  
+  var ext = newT.extension({href:"#someotherlink"},"more content");
+  
+  equals(ext.constructor, document.createElement("a").constructor, "the extension is returning a link, so check the constructor on the returned object");
+  equals(ext.innerHTML, "I am the content: more content", "the extension should have default content, plus the content added in at call time");
+  equals(ext.getAttribute("href"), "#somelink", "Make sure that the href is set to the default specified in the extension");
+  
+  extended = newT.extend("extension", function(attributes, content) {});
+  ok(!extended, "extend should return false when unsuccessfully extending (in this case, method name exists and force not specified)");
+
+  extended = newT.extend("extension", function(attributes, content) {}, true);
+  ok(extended, "extend should return true when successfully extending (in this case, method name exists and force IS specified)");
+  
+  newT = newT.clone();
 });
