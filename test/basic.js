@@ -1,4 +1,4 @@
-//TODO: test each, eachRender, when, extend, passing multiple pieces of content to an element
+//TODO: test each, eachRender, extend, passing multiple pieces of content to an element
 // frags, and using an array as the top level implicit frag generator
 
 module("basic");
@@ -206,4 +206,101 @@ test("safeModeAttributeOverride", function() {
   equal(p_unsafe.firstChild.nodeType, 1, "attribute safe mode (off) method is triggered  which should override global (on),  innerHTML should be used on html string and first child is nodeType == 1");
 
   newT = newT.clone();
+});
+
+test("setOption", function() {
+  expect(3)
+
+  deepEqual(newT.options, {if_attr: "when",local_safe: "_safe",safe_mode: false}, "options should start out equal to defaults");
+  
+  newT.setOption({if_attr: "iff",local_safe: "_is_safe"});
+
+  deepEqual(newT.options, {if_attr: "iff",local_safe: "_is_safe",safe_mode: false}, "options should be updateable by passing an object as a param");
+
+  newT.setOption("safe_mode", true);
+
+  deepEqual(newT.options, {if_attr: "iff",local_safe: "_is_safe",safe_mode: true}, "options should be updateable by passing an key as the first param and a vlue as the second");
+
+  
+  newT = newT.clone();
+});
+
+
+test("when", function() {
+  expect(7)
+
+  var p = newT.p({when:1<2}, "I should exist");
+  var p2 = newT.p({when:1>2}, "I should not exist");
+  
+  
+  equals(p.constructor, document.createElement("p").constructor, "p is created as a paragraph element because the test passes");
+  equals(p2, "", "p2 is just an empty string because the test fails");
+  
+  newT.setOption("if_attr", "iff");
+  
+  equals(newT.options["if_attr"], "iff", "the attribute option for conditionally displaying nodes is changed to iff");
+
+  var p = newT.p({when:1<2}, "I should exist");
+  var p2 = newT.p({when:1>2}, "I should exist");
+  var p3 = newT.p({iff:1<2}, "I should exist");
+  var p4 = newT.p({iff:1>2}, "I should not exist");
+  
+  equals(p.constructor, document.createElement("p").constructor, "p is created as a paragraph element because when is no longer the test attribute");
+  equals(p2.constructor, document.createElement("p").constructor, "p2 is created as a paragraph element because when is no longer the test attribute");
+  equals(p3.constructor, document.createElement("p").constructor, "p3 is created as a paragraph element because the test passes");
+  equals(p4, "", "p4 is just an empty string because the test fails");
+
+  
+  newT = newT.clone();
+});
+
+test("each", function() {
+  
+  expect(20)
+  
+  var arr = ["one", "two", "three", "four", "five"];
+  
+  newT.save("each_example_array", function(data) {
+    return (
+      newT.ul(
+        newT.each(data, function(count, idx) { return newT.li(idx,". ", count); })
+      )
+    )
+  });
+  
+  var ul = newT.render("each_example_array", arr);
+  
+  equals(ul.constructor, document.createElement("ul").constructor, "ul is created as a unordered list element");
+  equals(ul.childNodes.length, arr.length, "ul should have one child element for each element of the array");
+  
+  for (var i=0, len=arr.length; i<len; i++) {
+    var li = ul.childNodes[i];
+    equals(li.constructor, document.createElement("li").constructor, "each list item is created as a list item");
+    equals(li.innerHTML, i+". "+arr[i], "each list item should have the text from one of the spots of the array in it");
+  }
+
+  var obj = {one: "first", two: "second", three: "third"};
+  
+  newT.save("each_example_object", function(data) {
+    return (
+      newT.ul(
+        newT.each(data, function(count, key) { return newT.li(key, ". ", count); })
+      )
+    )
+  });
+  
+  ul = newT.render("each_example_object", obj);
+  
+  equals(ul.constructor, document.createElement("ul").constructor, "ul is created as a unordered list element");
+  equals(ul.childNodes.length, 3, "ul should have one child element for each element of the object");
+  
+  i = 0;
+  for (var key in obj) {
+    var li = ul.childNodes[i];
+    equals(li.constructor, document.createElement("li").constructor, "each list item is created as a list item");
+    equals(li.innerHTML, key+". "+obj[key], "each list item should have the text from one of the spots of the object in it");
+    i++;
+  }
+
+  
 });

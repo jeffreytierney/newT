@@ -120,7 +120,7 @@
       
       this.cur_options = opts;
       
-      new_el = this.templates[ns][name](opts.data);
+      new_el = this.templates[ns][name](opts.data, opts._i, opts._idx);
       if(typeof new_el === "object" && new_el.length > 0) {
         var _new_el=new_el.slice(0);
         new_el=document.createDocumentFragment();
@@ -154,11 +154,14 @@
     // for each item in the collection
     // uses a document fragment to collect each element and pass it back
     eachRender: function(data, template_name, opts) {
+      // dont set cur_options here because that happens in render
       opts = opts || {};
-      var frag = document.createDocumentFragment();
+      var frag = document.createDocumentFragment(), idx=0;
       opts.el = frag;
       for(var i in data) {
         if(data.hasOwnProperty(i)) {
+          opts["_i"] = i;
+          opts["_idx"] = idx++;
           this.render(template_name, data[i], opts);
         }
       }
@@ -173,7 +176,7 @@
       var frag = document.createDocumentFragment(), child, idx=0;
       for(var i in data) {
         if(data.hasOwnProperty(i)) {
-          child = func(data[i], idx);
+          child = func(data[i], i, idx);
           if(child) {
             frag.appendChild(child);
           }
