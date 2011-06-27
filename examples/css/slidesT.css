@@ -7,7 +7,11 @@
 body, input, textarea {
     font-family:Arial,sans-serif;
     font-size:13px;
+    color:#ccc;
     background:black;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-family:Georgia;
 }
 h1 {
     font-size:23px;
@@ -69,7 +73,15 @@ h6 {
 .slideshow_loader img {
     margin-top:30px;
 }
+#show_loading_txt {
+    padding-top:20px;
+    color:#ccc;
+}
 .unloaded_img {
     display:none;
+}
+
+.slideShowHeaderBox {
+    position:absolute;
 }
 

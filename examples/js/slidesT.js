@@ -18,6 +18,7 @@
     // newT Slides
     nS.prototype = {
         loading : 0,
+        total : 0,
         evt_listen : [],
         bind_types : "photo_load complete",
         bind : function(type, func, scope ) {
@@ -127,6 +128,7 @@
                 photos=self.parse_photos( data );
             self.photo_load_start( photos.length );
             self.loading=photos.length;
+            self.total+=photos.length;
             return newT.eachRender( photos, self.templates.photo );
         },
 
@@ -146,12 +148,16 @@
                         clss : "slideshow_loader",
                         style : "width:200px;height:200px;top:" + (h-100) + "px;left:" + (w-100) + "px;",
                     },
-                            newT.img({
-                                src : "graphics/black_64_preloader.gif",
-                                width : 64,
-                                height:64,
-                                border:0
-                            }))
+                        newT.img({
+                            src : "graphics/black_64_preloader.gif",
+                            width : 64,
+                            height:64,
+                            border:0
+                        }),
+                        newT.div({id : "show_loading_txt"},
+                            "Loading 1 of " + self.remote_setup.per_page
+                        )
+                    )
                 ])
             });
         },
@@ -180,6 +186,7 @@
         * */
         photo_load_start : function() {
         },
+
         photo_loaded : function(e, elem, photo_info) {
             var self=this;
             self.loading-=1;
@@ -277,7 +284,8 @@ function out( str, options ) {
     
     var sC = function() {
         this.init();
-    }, active_transition=false;
+    }, active_transition=false,
+       $load_txt;
     sC.prototype = {
         key : {
             SPACE : 32,
@@ -298,6 +306,14 @@ function out( str, options ) {
             } else {
                 $(".slideshow_loader").hide();
             }
+        },
+
+        loader_update : function(  ) {
+            var total=slidesT.total;
+            if(!$load_txt) {
+                $load_txt = $("#show_loading_txt");
+            }
+            $load_txt.html("Loading " + (total-slidesT.loading) + " of " + slidesT.total );
         },
 
         listen: function() {
@@ -348,12 +364,14 @@ function out( str, options ) {
         },
         
         display_box : function( el ) {
-            var $next=el;
-            var $w=$(window);
-            var next_w=$next.width();
-            var next_h=$next.height();
-            var left_px=Math.max( 0, Math.round( ($w.width()/2) - next_w/2  ) );
-            var top_px=Math.max( 0, Math.round( ($w.height()-20)/2 ) - next_h/2 );
+            var $next=el,
+                $w=$(window),
+                next_w=$next.width(),
+                next_h=$next.height(),
+                left_px=Math.max( 0, Math.round( ($w.width()/2) - next_w/2  ) ),
+                top_px=Math.max( 0, Math.round( ($w.height()-20)/2 ) - next_h/2 );
+
+
             $(".outer_slideshow").animate({
                 width : next_w,
                 height : next_h,
@@ -367,6 +385,7 @@ function out( str, options ) {
         all : function() {
             return $(".sng_photo_box img");
         },
+
         current : function() {
             var $curr = $(".sng_photo_box img:visible"); 
             if(!$curr || $curr.length <= 0) {
@@ -374,13 +393,10 @@ function out( str, options ) {
             }
             return $curr;
         },
+
         listen_photo : function() {
-            // listen for clicks events on the photo
-            //
             var self=this;
-            $(".sng_photo_box").bind("click", function(e){
-                // find where this element is in list,
-                // show "next" photo
+            $(".sng_photo_box").live("click", function(e){
                 self.change_photo(1);
             })
         },
@@ -411,3 +427,7 @@ function out( str, options ) {
     }
     window.showControls = new sC();
 })(window);
+
+
+
+
