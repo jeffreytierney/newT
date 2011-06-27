@@ -26,18 +26,24 @@
                 slidesT.unbind("complete");
                 slidesT.unbind("photo_load");
                 var cnt=0;
+                setTimeout(function(){
+
                 slidesT.add_page( function() {
                     cnt+=1;
-                    if(cnt > 8 ) { return; }
+                    if(cnt > 5 ) { return; }
                     slidesT.add_page(arguments.callee);
                 });
+
+
+                }, 5000); // wait 5 seconds for animations to play
                 
             });
             slidesT.bind("photo_load", function() {
                 // TODO, display loading info
+                showControls.loader_update();
             });
-            console.log(slidesT.evt_listen);
-            var promise = slidesT.start( $("#middle")  );
+            // kick it all off
+            var promise = slidesT.start( $("#middle"), "cute kitten"  );
             promise.done(function() {
                 // the DOM photos are added
                 // add some events, this could come later
