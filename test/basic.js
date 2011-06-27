@@ -1,6 +1,3 @@
-//TODO: test each, eachRender, extend, passing multiple pieces of content to an element
-// frags, and using an array as the top level implicit frag generator
-
 module("basic");
 
 test("createEmptyElement", function() {
@@ -302,5 +299,189 @@ test("each", function() {
     i++;
   }
 
+    newT = newT.clone();
   
 });
+
+test("eachRender", function() {
+  
+  expect(20)
+  
+  var arr = ["one", "two", "three", "four", "five"];
+  
+  newT.save("each_render_example_array", function(data) {
+    return (
+      newT.ul(
+        newT.eachRender(data, "each_render_example_array_li")
+      )
+    )
+  });
+  
+  newT.save("each_render_example_array_li", function(count, idx) {
+    return (
+      newT.li(idx,". ", count)
+    )
+  });
+  
+  var ul = newT.render("each_render_example_array", arr);
+  
+  equals(ul.constructor, document.createElement("ul").constructor, "ul is created as a unordered list element");
+  equals(ul.childNodes.length, arr.length, "ul should have one child element for each element of the array");
+  
+  for (var i=0, len=arr.length; i<len; i++) {
+    var li = ul.childNodes[i];
+    equals(li.constructor, document.createElement("li").constructor, "each list item is created as a list item");
+    equals(li.innerHTML, i+". "+arr[i], "each list item should have the text from one of the spots of the array in it");
+  }
+
+  var obj = {one: "first", two: "second", three: "third"};
+  
+  newT.save("each_render_example_object", function(data) {
+    return (
+      newT.ul(
+        newT.eachRender(data, "each_render_example_object_li")
+      )
+    )
+  });
+
+  newT.save("each_render_example_object_li", function(count, key) {
+    return (
+      newT.li(key, ". ", count)
+    )
+  });
+  
+  
+  ul = newT.render("each_render_example_object", obj);
+  
+  equals(ul.constructor, document.createElement("ul").constructor, "ul is created as a unordered list element");
+  equals(ul.childNodes.length, 3, "ul should have one child element for each element of the object");
+  
+  i = 0;
+  for (var key in obj) {
+    var li = ul.childNodes[i];
+    equals(li.constructor, document.createElement("li").constructor, "each list item is created as a list item");
+    equals(li.innerHTML, key+". "+obj[key], "each list item should have the text from one of the spots of the object in it");
+    i++;
+  }
+
+  newT = newT.clone();
+  
+});
+
+test("extend", function() {
+  expect(8);
+  
+  ok(!("extension" in newT), "Make sure that the extension we are trying to add is not there to begin with");
+  
+  var extended = newT.extend("extension", function(attributes, content) {
+    var args = Array.prototype.slice.call(arguments);
+    var attributes = {};
+    if (args[0].toString() === "[object Object]") { // if the first arg is an object, its attributes
+      attributes = args.shift();
+    }
+  
+    var content = "I am the content: ";
+    args.unshift(content);
+  
+    attributes.href = "#somelink";
+    args.unshift(attributes);
+  
+    var a = this.a.apply(this, args);
+    
+    return a;
+  });
+  
+  ok(extended, "extend should return true when successfully extending");
+  
+  ok(("extension" in newT), "Make sure that the extension is now there in the prototype");
+  
+  var ext = newT.extension({href:"#someotherlink"},"more content");
+  
+  equals(ext.constructor, document.createElement("a").constructor, "the extension is returning a link, so check the constructor on the returned object");
+  equals(ext.innerHTML, "I am the content: more content", "the extension should have default content, plus the content added in at call time");
+  equals(ext.getAttribute("href"), "#somelink", "Make sure that the href is set to the default specified in the extension");
+  
+  extended = newT.extend("extension", function(attributes, content) {});
+  ok(!extended, "extend should return false when unsuccessfully extending (in this case, method name exists and force not specified)");
+
+  extended = newT.extend("extension", function(attributes, content) {}, true);
+  ok(extended, "extend should return true when successfully extending (in this case, method name exists and force IS specified)");
+  
+  newT = newT.clone();
+});
+
+test("multiple pieces of content being passed to elements", function() {
+  expect(7);
+  var obj = {
+    name: "newT",
+    occupation: "templater",
+    title: "My Templates... let me show you them",
+    strength: 9001
+  };
+  
+  newT.save("multiple_content", function(data) {
+    return (
+      newT.div({id:"my_div"},
+        newT.h1(data.title),
+        newT.p("I am a paragraph about: ",
+          data.name,
+          newT.a({href:"#"}, "I am a link to some information about",
+            " being a ",
+            newT.span(data.occupation)
+          )
+        ),
+        newT.strong({"data-strength":data.strength},
+          "My strength is over 9000. In fact, its ",
+          data.strength
+        )
+      )
+    )
+  });
+  
+  var multi = newT.render("multiple_content", obj);
+  
+  equals(multi.constructor, document.createElement("div").constructor, "multi should return a div");
+  equals(multi.childNodes.length, 3, "There should be 3 top level child nodes to multi");
+  equals(multi.childNodes[0].innerHTML, obj["title"], "The content of the h1 element should be the value of the title property on the object passed in");
+  equals(multi.childNodes[1].childNodes.length, 3, "There should be 3 top level child node to the p (2 text nodes and one a)");
+  equals(multi.childNodes[1].childNodes[2].childNodes.length, 3, "There should be 3 top level child nodes to the a (2 text nodes and one span)");
+  equals(multi.childNodes[1].childNodes[2].childNodes[2].innerHTML, "templater", "Innerhtml of the span should properly incorporate the occupation value passed in from the object");
+  equals(multi.childNodes[2].getAttribute("data-strength"), obj["strength"], "The attribute data-strength should have the value of the strength attribute of the object passed in");
+  
+  newT = newT.clone();
+});
+
+test("frag", function() {
+  expect(3);
+  var frag = newT.frag();
+  
+  equals(frag.constructor, document.createDocumentFragment().constructor, "frag should return a frag");
+  
+  frag = newT.frag(
+    newT.div("hi"),
+    newT.p("hi"),
+    newT.a("hi")
+  );
+  
+  equals(frag.constructor, document.createDocumentFragment().constructor, "frag should still return a frag");
+  equals(frag.childNodes.length, 3, "frag should have 3 child nodes");
+  
+})
+
+test("templates returning an array should return a frag", function() {
+  expect(2);
+
+  newT.save("frag_array", function() {
+    return ([
+      newT.p("first"),
+      newT.p("second"),
+      newT.p("third")
+    ]);
+  });
+  
+  var frag = newT.render("frag_array");
+  
+  equals(frag.constructor, document.createDocumentFragment().constructor, "returning an array should implictly create and return a frag");
+  equals(frag.childNodes.length, 3, "frag should have 3 child nodes");
+  
+})
