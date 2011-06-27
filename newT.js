@@ -349,7 +349,16 @@
         return true;
       }
       return false;
+    },
+    noConflict: function(new_name) {
+      new_name = new_name || "__newT";
+      try{delete window[_last_name];}catch(ex){window[_last_name] = undefined;}
+      window[temp] = _old_newt;
+      window[new_name] = _temp;
+      _last_name = new_name;
+      
     }
   }
-  window[temp] = new T();
+  var _old_newt = window[temp], _temp, _last_name = temp;
+  window[temp] = _temp = new T();
 })();

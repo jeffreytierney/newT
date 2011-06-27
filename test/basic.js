@@ -525,4 +525,23 @@ test("templates returning an array should return a frag", function() {
   equals(frag.constructor, document.createDocumentFragment().constructor, "returning an array should implictly create and return a frag");
   equals(frag.childNodes.length, 3, "frag should have 3 child nodes");
   
+});
+
+test("noConflict", function() {
+  expect(7);
+  
+  equals(typeof newT, "object", "original newT string should have gotten paved by newT instantiation");
+  equals(typeof __newT, "undefined", "new name from noConflict should be undefined");
+  
+  newT.noConflict();
+  equals(typeof newT, "string", "newT should be a string now");
+  equals(newT, "some string that will get blown away", "newT should be a string now");
+  
+  equals(typeof __newT, "object", "new default noconflict name should be __newT")
+  
+  __newT.noConflict("newT");
+  
+  equals(typeof __newT, "undefined", "new name from noConflict should be undefined");
+  equals(typeof newT, "object", "original newT string should have gotten paved by newT instantiation");
+  
 })
