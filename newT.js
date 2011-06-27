@@ -156,6 +156,7 @@
     eachRender: function(data, template_name, opts) {
       // dont set cur_options here because that happens in render
       opts = opts || {};
+      if(!this.checkRender(opts)) { return ""; }
       var frag = document.createDocumentFragment(), idx=0;
       opts.el = frag;
       for(var i in data) {
@@ -172,6 +173,7 @@
     // uses a document fragment to collect each element and pass it back
     each: function(data, func, opts) {
       opts = opts || {};
+      if(!this.checkRender(opts)) { return ""; }
       this.cur_options = opts;
       var frag = document.createDocumentFragment(), child, idx=0;
       for(var i in data) {
@@ -185,6 +187,10 @@
       }
       this.cur_options = null;
       return frag;
+    },
+    checkRender: function(opts) {
+      if(this.options.if_attr in opts && !opts[this.options.if_attr]) { return false; }
+      return true;
     },
     // function that gets called in initializing the class... loops through
     // list of allowed html elements, and creates a helper function on the prototype
@@ -237,10 +243,9 @@
         // if it evaluates to true, the node will be rendered... if not, rendering will be short-circuited and an empty string will be returned
         // when is now just the default value for if_attr... this can be overridden using setOption()
         var _local_safe_mode;
-        if(this.options.if_attr in attributes){
-          if(!attributes[this.options.if_attr]) { el = null; return ""; }
-          else { delete attributes[this.options.if_attr]; }
-        } 
+        if(!this.checkRender(attributes)){ el = null; return "";}
+        delete attributes[this.options.if_attr];
+        
         if(this.options.local_safe in attributes) { 
           _local_safe_mode = !!attributes[this.options.local_safe]; 
           delete attributes[this.options.local_safe];

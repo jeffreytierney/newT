@@ -251,6 +251,47 @@ test("when", function() {
   newT = newT.clone();
 });
 
+test("when as option in looping constructs (eachRender)", function() {
+  expect(2)
+
+  newT.save("li_example", function(item) { return(newT.li(item)); })
+  var arr = [1,2,3];
+  
+  var ul = newT.ul(
+    newT.eachRender(arr, "li_example", {when:arr.length > 5})
+  );
+  equals(ul.constructor, document.createElement("ul").constructor, "ul should be a ul because the when test passes");
+
+  var ul = newT.ul(
+    newT.eachRender(arr, "li_example", {when:arr.length > 0})
+  );
+  
+  equals(ul.childNodes.length, arr.length, "ul should have one child node for each element in the array");
+  
+  
+  newT = newT.clone();
+});
+
+test("when as option in looping constructs (each)", function() {
+  expect(2)
+
+  var arr = [1,2,3];
+  
+  var ul = newT.ul(
+    newT.each(arr, function(item) { return newT.li(item); }, {when:arr.length > 5})
+  );
+  equals(ul.constructor, document.createElement("ul").constructor, "ul should be a ul because the when test passes");
+
+  var ul = newT.ul(
+    newT.each(arr, function(item) { return newT.li(item); }, {when:arr.length > 0})
+  );
+  
+  equals(ul.childNodes.length, arr.length, "ul should have one child node for each element in the array");
+  
+  
+  newT = newT.clone();
+});
+
 test("each", function() {
   
   expect(20)
