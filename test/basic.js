@@ -1,5 +1,3 @@
-//TODO: test frags, and using an array as the top level implicit frag generator
-
 module("basic");
 
 test("createEmptyElement", function() {
@@ -450,6 +448,40 @@ test("multiple pieces of content being passed to elements", function() {
   equals(multi.childNodes[1].childNodes[2].childNodes[2].innerHTML, "templater", "Innerhtml of the span should properly incorporate the occupation value passed in from the object");
   equals(multi.childNodes[2].getAttribute("data-strength"), obj["strength"], "The attribute data-strength should have the value of the strength attribute of the object passed in");
   
+  newT = newT.clone();
+});
+
+test("frag", function() {
+  expect(3);
+  var frag = newT.frag();
   
+  equals(frag.constructor, document.createDocumentFragment().constructor, "frag should return a frag");
+  
+  frag = newT.frag(
+    newT.div("hi"),
+    newT.p("hi"),
+    newT.a("hi")
+  );
+  
+  equals(frag.constructor, document.createDocumentFragment().constructor, "frag should still return a frag");
+  equals(frag.childNodes.length, 3, "frag should have 3 child nodes");
+  
+})
+
+test("templates returning an array should return a frag", function() {
+  expect(2);
+
+  newT.save("frag_array", function() {
+    return ([
+      newT.p("first"),
+      newT.p("second"),
+      newT.p("third")
+    ]);
+  });
+  
+  var frag = newT.render("frag_array");
+  
+  equals(frag.constructor, document.createDocumentFragment().constructor, "returning an array should implictly create and return a frag");
+  equals(frag.childNodes.length, 3, "frag should have 3 child nodes");
   
 })
