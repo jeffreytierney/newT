@@ -1,7 +1,12 @@
 newT
 ====
 
-Simple JavaScript templating.
+Tasty JavaScript Templating.
+
+
+Learn it over lunch, release a production quality site by dinner. Nom
+Nom n0m.
+
 
 
 Using newT is simple, just include newT.js, and start managing the DOM in a convenient and reusuable way.
