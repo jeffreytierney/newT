@@ -2,9 +2,11 @@
     newT
         a JavaScript template library
 
-    author: jeffrey tierney | https://twitter.com/jeffreytierney
+    authors:  jeffrey tierney | https://twitter.com/jeffreytierney
+              gregory tomlinson | https://twitter.com/gregory80
+              
     project home: https://github.com/jeffreytierney/newT
-    liscense: (see author)
+    license: (see author)
     
     Usage:
     
@@ -54,7 +56,7 @@
                 console.log("index position", idx);
             })
         
-        Innerards:
+        Innards:
             newT.templates.global will provide current "templates"
 
 */
