@@ -544,4 +544,48 @@ test("noConflict", function() {
   equals(typeof __newT, "undefined", "new name from noConflict should be undefined");
   equals(typeof newT, "object", "original newT string should have gotten paved by newT instantiation");
   
-})
+});
+
+test("addEls as string", function() {
+  expect(6);
+  
+  ok(!("extra1" in newT), "extra should not yet be a function on newt");
+  ok(!("extra2" in newT), "extra2 should not yet be a function on newt");
+  
+  newT.addEls("extra1 extra2");
+  
+  ok("extra1" in newT, "extra should NOW be a function on newt");
+  ok("extra2" in newT, "extra2 should NOW be a function on newt");
+  
+  extra1 = newT.extra1();
+  extra2 = newT.extra2();
+  
+  equals(extra1.constructor, document.createElement("extra1").constructor, "extra");
+  equals(extra2.constructor, document.createElement("extra2").constructor, "extra");
+  
+  delete newT.constructor.prototype["extra1"];
+  delete newT.constructor.prototype["extra2"];
+  
+});
+
+test("addEls as array", function() {
+  expect(6);
+  
+  ok(!("extra1" in newT), "extra should not yet be a function on newt");
+  ok(!("extra2" in newT), "extra2 should not yet be a function on newt");
+  
+  newT.addEls(["extra1", "extra2"]);
+  
+  ok("extra1" in newT, "extra should NOW be a function on newt");
+  ok("extra2" in newT, "extra2 should NOW be a function on newt");
+  
+  extra1 = newT.extra1();
+  extra2 = newT.extra2();
+  
+  equals(extra1.constructor, document.createElement("extra1").constructor, "extra");
+  equals(extra2.constructor, document.createElement("extra2").constructor, "extra");
+  
+  delete newT.constructor.prototype["extra1"];
+  delete newT.constructor.prototype["extra2"];
+  
+});

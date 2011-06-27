@@ -1,26 +1,26 @@
 /*
     newT
         a JavaScript template library
-
+    
     authors:  jeffrey tierney | https://twitter.com/jeffreytierney
               gregory tomlinson | https://twitter.com/gregory80
-              
+    
     project home: https://github.com/jeffreytierney/newT
     license: (see author)
     
     Usage:
-    
-        Create a new 'newT' -- a JS represention of DOM Template w/ event capabilities
         
+        Create a new 'newT' -- a JS represention of DOM Template w/ event capabilities
+            
             newT.save("id_name", function( data ) {
-                // use the () for multiline return of DOM elements via newT.  
+                // use the () for multiline return of DOM elements via newT.
                 // the second param is the 'contents' of the element
-                // this sample is a simple string derived from data when newT.render() is called          
-                return ( 
+                // this sample is a simple string derived from data when newT.render() is called
+                return (
                     newT.div({clss : "my_css_class"}, data.foo)
                 )
             });
-            
+        
         Converter syntax for Element CSS Class Attribute: "clss"
         
         Render DOM Elements
@@ -28,9 +28,9 @@
             @param (any) the data to pass to the method used in the second parameter of newT.save("name", func);
             newT.render("id_name", { foo : "hello world bars" } );
             
-            
-        Render DOM with options and scope
         
+        Render DOM with options and scope
+            
             newT.render("id_name", {}, {
                 scope : obj_scope || this
                 data : { } // will be overriden completely - not extended
@@ -38,18 +38,18 @@
                 pre : func // excuted w/ scope passed in
             })
             
-            
+        
         On Script Load
             On script load, the newT (or temp name is assigned) is initialized.
-                This single instance allows convience referrals to complex structures through the 
+                This single instance allows convience referrals to complex structures through the
                 newT iterface
-                
+        
         Use with innerHTML
             newT.renderToString("id_name", {
                 foo : "I come back as a string, no a DOM node"
             });
-            
 
+        
         Iteration
             newT.each(["one", "two"], function( data, idx ) {
                 console.log("data", data);
@@ -66,12 +66,12 @@
   // can be overridden by passing something different
   // into the self executing wrapper function
   temp = temp || "newT";
-
+  
   // internally refer to it as T for brevity sake
   var T = function(options) {
     this.init(options || {});
   }, regex_pattern=/\<[^\>]+\>|\&[^ ]+;/;
-
+  
   T.prototype = {
     constructor: T.prototype.constructor,
     version : "1.1.1.1",
@@ -102,7 +102,7 @@
     // and if an exisiting root el was passed in, append it to that root
     // either way, return the newly created element(s)
     render: function(name, data, opts) {
-      var name_parts = name.split("."), 
+      var name_parts = name.split("."),
           ns = "global",
           new_el;
       name = name_parts[0];
@@ -113,7 +113,7 @@
       opts = opts || {};
       opts.scope = opts.scope || null;
       opts.data = data;
-
+      
       // if a preprocessing function is specified in the options, call it
       // use either the specified scope, or the default of null (set earlier)
       // params
@@ -130,11 +130,11 @@
             new_el.appendChild( _new_el[i] );
         }
       }
-
+      
       if(opts.el) {
         opts.el.appendChild(new_el);
       }
-
+      
       // if a posprocessing function is specified in the options, call it
       // use either the specified scope, or the default of null (set earlier)
       if (opts.post) { opts.post.call(opts.scope, new_el, opts.data); }
@@ -145,12 +145,12 @@
     renderToString: function(name, data, opts) {
       opts = opts || {};
       delete opts.el;
-
+      
       var el = document.createElement("div");
       el.appendChild(this.render(name, data, opts));
-
+      
       return el.innerHTML;
-
+    
     },
     // function to iterate over a collection and render a previously saved template
     // for each item in the collection
@@ -202,18 +202,12 @@
       var el_list = "a abbr address area article aside audio b base bdi bdo blockquote body br button canvas caption cite code col colgroup command datalist dd del details device dfn div dl dt em embed fieldset figcaption figure footer form h1 h2 h3 h4 h5 h6 head header hgroup hr html i iframe img input ins kbd keygen label legend li link map mark menu meta meter nav noscript object ol optgroup option output p param pre progress q rp rt ruby s samp script section select small source span strong style sub summary sup table tbody td textarea tfoot th thead time title tr track ul var video wbr",
           els = el_list.split(" "),
           prefix = this.options.prefix || "", _this = this;
-
+      
       // extra helper for just grouping a bunch together without a specific parent
-      els.push("frag");      
+      els.push("frag");
       
+      this.addEls(els, true);
       
-      for(var i=0, len=els.length; i<len; i++) (function(el) {
-        T.prototype[prefix+el] = function() {
-          var args = Array.prototype.slice.call(arguments);
-          args.unshift(el);
-          return T.prototype.element.apply(_this, args);
-        }
-      })(els[i]);
       return this;
     },
     // generic version of the function used to build the element specific creation functions
@@ -232,14 +226,14 @@
       else {
         return el;
       }
-
+      
       if (args[0] && args[0].toString() === "[object Object]") {
         attributes = content.shift();
       }
       else {
         attributes = null;
       }
-
+      
       if(attributes) {
         // when is not an attribute... but can accept a test case that can be used for conditional rendering
         // if it evaluates to true, the node will be rendered... if not, rendering will be short-circuited and an empty string will be returned
@@ -248,8 +242,8 @@
         if(!this.checkRender(attributes)){ el = null; return "";}
         delete attributes[this.options.if_attr];
         
-        if(this.options.local_safe in attributes) { 
-          _local_safe_mode = !!attributes[this.options.local_safe]; 
+        if(this.options.local_safe in attributes) {
+          _local_safe_mode = !!attributes[this.options.local_safe];
           delete attributes[this.options.local_safe];
         }
         
@@ -276,7 +270,7 @@
           }
         }
       }
-
+      
       for(var i=0, len=content.length; i<len; i++) {
         // if the content is a string, create a Text Node to hold it and append
         // unless (for now) there are html tags or entities in it... then just innerHTML it
@@ -284,17 +278,17 @@
             case "string":
                 this.addText(el, content[i], _local_safe_mode);
             break;
-          
+            
             case "number":
-                el.appendChild(document.createTextNode(content[i]));                
+                el.appendChild(document.createTextNode(content[i]));
             break;
-          
+            
             case "function":
                 var result = content[i]();
                 if(typeof result == "string") {
                   this.addText(el, result, _local_safe_mode);
-                }        
-                else {  
+                }
+                else {
                   el.appendChild(result);
                 }
             break;
@@ -303,7 +297,7 @@
             default:
                 el.appendChild(content[i]);
             break;
-
+        
         }
       }
       return el;
@@ -321,15 +315,15 @@
       if (typeof key === "object") {
         for (var _key in key) { this.options[_key] = key[_key]; }
       }
-      else { 
+      else {
         this.options[key] = val;
       }
       return this;
     },
-    // when safe mode is set to on, any strings 
+    // when safe mode is set to on, any strings
     safeMode: function(on) {
       if(typeof on == "undefined") { on = true; }
-      this.options["safe_mode"] = !!on; 
+      this.options["safe_mode"] = !!on;
       return this;
     },
     isSafeMode: function(_local_safe_mode) {
@@ -351,6 +345,18 @@
         return true;
       }
       return false;
+    },
+    addEls: function(els, force) {
+      if(typeof els === "string") { els = els.split(" "); }
+      var _this = this;
+      for(var i=0, len=els.length; i<len; i++) (function(el) {
+        _this.extend(el, function() {
+          var args = Array.prototype.slice.call(arguments);
+          args.unshift(el);
+          return T.prototype.element.apply(_this, args);
+        }, force);
+      })(els[i]);
+      return this;
     },
     noConflict: function(new_name) {
       new_name = new_name || "__newT";
