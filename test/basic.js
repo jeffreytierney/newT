@@ -1,5 +1,4 @@
-//TODO: test passing multiple pieces of content to an element
-// frags, and using an array as the top level implicit frag generator
+//TODO: test frags, and using an array as the top level implicit frag generator
 
 module("basic");
 
@@ -412,3 +411,45 @@ test("extend", function() {
   
   newT = newT.clone();
 });
+
+test("multiple pieces of content being passed to elements", function() {
+  expect(7);
+  var obj = {
+    name: "newT",
+    occupation: "templater",
+    title: "My Templates... let me show you them",
+    strength: 9001
+  };
+  
+  newT.save("multiple_content", function(data) {
+    return (
+      newT.div({id:"my_div"},
+        newT.h1(data.title),
+        newT.p("I am a paragraph about: ",
+          data.name,
+          newT.a({href:"#"}, "I am a link to some information about",
+            " being a ",
+            newT.span(data.occupation)
+          )
+        ),
+        newT.strong({"data-strength":data.strength},
+          "My strength is over 9000. In fact, its ",
+          data.strength
+        )
+      )
+    )
+  });
+  
+  var multi = newT.render("multiple_content", obj);
+  
+  equals(multi.constructor, document.createElement("div").constructor, "multi should return a div");
+  equals(multi.childNodes.length, 3, "There should be 3 top level child nodes to multi");
+  equals(multi.childNodes[0].innerHTML, obj["title"], "The content of the h1 element should be the value of the title property on the object passed in");
+  equals(multi.childNodes[1].childNodes.length, 3, "There should be 3 top level child node to the p (2 text nodes and one a)");
+  equals(multi.childNodes[1].childNodes[2].childNodes.length, 3, "There should be 3 top level child nodes to the a (2 text nodes and one span)");
+  equals(multi.childNodes[1].childNodes[2].childNodes[2].innerHTML, "templater", "Innerhtml of the span should properly incorporate the occupation value passed in from the object");
+  equals(multi.childNodes[2].getAttribute("data-strength"), obj["strength"], "The attribute data-strength should have the value of the strength attribute of the object passed in");
+  
+  
+  
+})
