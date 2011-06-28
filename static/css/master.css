@@ -3,7 +3,13 @@ body {
     font-family:Arial, sans-serif;
     font-size:15px;
 }
-
+h1,h2,h3,h4 {
+    font-family:Garamond,Georgia,serif;
+}
+a {
+    text-decoration:none;
+    color:#69c;
+}
 #container {
     width:600px;
     margin:0 auto 100px;
@@ -11,10 +17,21 @@ body {
 .main_content p {
     font-size:18px;
     line-height:1.5em;
-    margin:8px 100px 15px 0;
+    margin:8px 100px 25px 0;
+}
+.main_content h2 {
+    margin:5px 0 10px;
 }
 #top {
     margin:15px 0px 30px;
+}
+#top h1 {
+    font-size:64px;
+}
+#top p {
+    color:#999;
+    margin:5px 0 0;
+    font-size:23px;
 }
 ol {
     list-style-position:inside;
