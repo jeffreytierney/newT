@@ -10,14 +10,18 @@ a {
     text-decoration:none;
     color:#69c;
 }
+a:hover {
+    text-decoration:underline;
+}
 #container {
-    width:620px;
+    width:580px;
     margin:0 auto 100px;
+    padding-right:40px;
 }
 .main_content p {
     font-size:18px;
     line-height:1.5em;
-    margin:8px 120px 25px 0;
+    margin:8px 40px 25px 0;
 }
 .main_content h2 {
     margin:10px 0 15px;
@@ -33,12 +37,15 @@ a {
     margin:0px 0 0;
     font-size:25px;
 }
-ol {
+.display_box {
+    margin-bottom:50px;
+}
+ol, ul {
     list-style-position:inside;
     margin: 0 0 10px 15px;
     font-size:18px;
 }
-ol li {
+ol li, ul li {
     margin:0 0 5px 0;
 }
 code {

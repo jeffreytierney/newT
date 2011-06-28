@@ -15,12 +15,12 @@
     </div>
 
     <div id="middle" class="main_content">
-        <div class="">
+        <div class="display_box">
         <p>
             You love building JavaScript apps. Armed with the latest
             tools, you're dying for a tasty little JS template that has
             a friendly syntax, low learning curve and lots of room to
-            grow. Enter newT.js, tasty JavaScript templating.
+            grow. Enter <a href="https://raw.github.com/jeffreytierney/newT/master/newT.js">newT.js</a>, tasty JavaScript templating.
             </p>
 
             <p>With a nod to Haml, and much love to super templates
@@ -32,7 +32,9 @@
             options. And, newT.js helps you build a safer site, aiding
             in the fight against persistent XSS attacks.</p>
 
-            <p>How do you get all these awesome features? Easy, follow
+            <p>How do you get all these awesome features? Easy, <a
+                href="https://raw.github.com/jeffreytierney/newT/master/newT.js">get
+            newT.js</a> and follow
             the instructions below for tasty JS templating</p>
         </div>
         <h2>Add newT.js</h2>
@@ -60,7 +62,7 @@
             
         </div>
 
-        <div id="">
+        <div id="" class="display_box">
             <h2>Save a newT.js Template</h2>
             <p>No overiew or tutorial would be complete without a cheesy hello world
 example. Let's start with a simple template, a DIV with some dynamically
@@ -87,7 +89,7 @@ injected text for flavor.</p>
 
         </div>
 
-        <div id="">
+        <div id="" class="display_box">
             <h2>Render a newT.js Template</h2>
             <p>Onto step #3, rendering the cheesy hello world example.</p>
 
@@ -113,7 +115,7 @@ world text.</p>
             element, in this case, the body tag.</p>
         </div>
 
-        <div id="">
+        <div id="" class="display_box">
             <h2>Going Deeper with newT.js</h2>
             <p>Rendering a single element is great, but it's much more
             likely you'll need to create a more complex HTML structure.
@@ -162,6 +164,79 @@ world text.</p>
                 code</a>.</p>
         </div>
 
+<div class="display_box">
+    <h2>No Root Node with newT.js</h2>
+
+<p>When we want to append two nodes, we need to give newT.js an array.
+newT.js will produce a document fragment. Take a look at the below
+example.</p>
+<code class="syntax">
+<div class="highlight"><pre><span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;top_level&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">([</span>
+        <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">),</span>
+        <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">(</span><span class="s2">&quot;two&quot;</span><span class="p">)</span>
+        <span class="p">])</span>
+<span class="p">})</span>
+        
+<span class="kd">var</span> <span class="nx">nodes</span> <span class="o">=</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">&quot;top_level&quot;</span><span class="p">,</span> <span class="p">{});</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">nodes</span> <span class="p">);</span>
+</pre></div>
+
+</code>
+
+            <p><a href="examples/top_level.html">See the example</a> and
+            <a
+                href="https://github.com/jeffreytierney/newT/blob/master/examples/top_level.html">grab the
+                code</a>.</p>
+
+
+</div>
+
+<div class="display_box">
+    <h2>Using newT.eachRender</h2>
+    <p>Let's face it, looping over lists is a common action. Now
+    building DOM lists can be quick and painless, take a look at the
+    eachRender method.</p>
+    <code class="syntax">
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">a_list</span><span class="o">=</span><span class="p">[{</span>
+    <span class="nx">foo</span> <span class="o">:</span> <span class="s2">&quot;one&quot;</span>
+<span class="p">},{</span>
+    <span class="nx">foo</span> <span class="o">:</span> <span class="s2">&quot;two&quot;</span>
+<span class="p">},{</span>
+    <span class="nx">foo</span> <span class="o">:</span> <span class="s2">&quot;three&quot;</span>
+<span class="p">}];</span>
+
+
+<span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;items_list&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="nx">newT</span><span class="p">.</span><span class="nx">li</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">foo</span> <span class="o">+</span> <span class="s2">&quot; - yey!&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="p">});</span>
+
+<span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;a_list&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+        <span class="k">return</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">ul</span><span class="p">(</span> <span class="p">{</span><span class="nx">clss</span> <span class="o">:</span> <span class="s2">&quot;a_list_class&quot;</span><span class="p">},</span>
+        <span class="nx">newT</span><span class="p">.</span><span class="nx">eachRender</span><span class="p">(</span> <span class="nx">data</span><span class="p">,</span> <span class="s2">&quot;items_list&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">});</span>
+
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> 
+    <span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">&quot;a_list&quot;</span><span class="p">,</span> <span class="nx">a_list</span><span class="p">)</span> 
+<span class="p">);</span>
+</pre></div>
+
+    </code>
+    <p>We are going to use two newT templates, save "items_list", which
+    is list item, and "a_list", which is the HTML shell.</p>
+
+    <p>The "a_list" structure creates an unordered list, and
+    <b>newT.eachRender</b> is its child node(s). Now, when we render "a_list",
+    we can pass in an array of objects.</p>
+    <p><a href="examples/each_render.html">See the example</a> and
+            <a
+                href="https://github.com/jeffreytierney/newT/blob/master/examples/each_render.html">grab the code</a>.</p>
+
+</div>
         <div>
             <h2>Using newT.js in Widgets</h2>
             <p>Of course newT.js can be used in widgets! Why wouldn't
@@ -185,8 +260,22 @@ world text.</p>
             
            
         </div>
-        
-    </div> <!-- end #middle -->
+        <div class="display_box">
+            <h2>More Examples</h2>
+            <p>We'e just getting started! You can find even more examples in the <a href="https://github.com/jeffreytierney/newT/tree/master/examples">newT.js examples
+                folder</a>. Or, have a look at the <a href="https://github.com/jeffreytierney/newT/blob/master/newT.js">source code</a>. As always
+        feel free to hit us up on Twitter. <a href="http://twitter.com/jeffreytierney">@jeffreytierney</a> and <a
+            href="http://twitter.com/gregory80">@gregory80</a> </p>
+
+        <ul>
+            <li><a href="examples/helloworld.html">Hello World</a></li>
+            <li><a href="examples/top_level.html">No Root Node</a></li>
+            <li><a href="examples/each_render.html">Each Render</a></li>
+            <li><a href="examples/nested_iteration.html">Nested Iteration</a></li>
+            <li><a href="examples/auto_append.html">Auto Append</a></li>
+        </ul>
+        </div>
+     </div> <!-- end #middle -->
     <div id="footer">
         © Copyright 2011. Lovingly crafted in the Greater New York Area. 
     </div>
