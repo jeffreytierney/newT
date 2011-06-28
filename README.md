@@ -5,17 +5,18 @@ Tasty JavaScript Templating.
 
 
 Learn it over lunch, release a production quality site by dinner. Nom
-Nom n0m.
+Nom n0m. [Read more on newtjs.org](http://newtjs.org)
 
 
-
-Using newT is simple, just include newT.js, and start managing the DOM in a convenient and reusuable way.
 
 
 Usage
 ====
 Using newT is quick and easy, it's similar to HTML nesting, but allows for easier injection of 
 dynamic data such as AJAX responses, or responding to user interaction.
+
+Find many more examples on using newT.js [here](http://newtjs.org)
+
 
 
 Hello World, a nested node
@@ -37,27 +38,13 @@ See this snippet:  examples/helloworld.html
     document.body.appendChild(dom_node);
 
 
-Rendering Templates
-======
+Find even more [examples on using newT.js](http://newtjs.org) or check out the [examples
+folder](https://github.com/jeffreytierney/newT/tree/master/examples)
 
-In order to properly render a template, the saved value must return a
-single root node. Such as the above hello world, this will not work,
-however
 
-    newT.save("wont_work", function() {
-        return (
-            newT.div("one"),
-            newT.div("two")
-        )
-    });
+Authors
+===
 
-Instead, we need to wrap the return response in an array, which will
-wrap the elements in a Docuemnt Fragment
-
-    newT.save("top_level", function(d) {
-        return ([
-            newT.div("one"),
-            newT.div("two")
-        ])
-    });
+jeffrey tierney | https://twitter.com/jeffreytierney
+gregory tomlinson | https://twitter.com/gregory80
 
