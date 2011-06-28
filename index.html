@@ -38,7 +38,7 @@
         <h2>Add newT.js</h2>
         <div class="">
             <p>To get started, add newT.js to your page. </p>
-            <code type="html">
+            <code type="html" class="syntax">
 <div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;newT.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
 </pre></div>
 
@@ -65,12 +65,13 @@
             <p>No overiew or tutorial would be complete without a cheesy hello world
 example. Let's start with a simple template, a DIV with some dynamically
 injected text for flavor.</p>
-            <code>
-                <pre  type="javascript">
-newT.save("helloworld", function(data){
-    return newT.div( data.text );
-});
-                </pre>
+            <code class="syntax">
+
+<div class="highlight"><pre><span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;helloworld&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">(</span> <span class="nx">data</span><span class="p">.</span><span class="nx">text</span> <span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
             </code>
 
             <p>Wow, that's a lot of code! Well, not really, but let's
@@ -90,22 +91,22 @@ newT.save("helloworld", function(data){
             <h2>Render a newT.js Template</h2>
             <p>Onto step #3, rendering the cheesy hello world example.</p>
 
-            <code>
-                <pre type="javascript">
-document.body.appendChild( 
-    newT.render( "helloword" { 
-        text : "hello newT world!" 
-    })
-);
-                </pre>
+            <code class="syntax">
+
+<div class="highlight"><pre><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> 
+    <span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span> <span class="s2">&quot;helloword&quot;</span> <span class="p">{</span> 
+        <span class="nx">text</span> <span class="o">:</span> <span class="s2">&quot;hello newT world!&quot;</span> 
+    <span class="p">})</span>
+<span class="p">);</span>
+</pre></div>
             
             </code>
             <p>Adds a new DIV element to the body element with the hello
 world text.</p>
-            <code>
-                <pre type="javascript">
-&lt;div>hello newT world!"&lt;/div>
-                </pre>
+<code class="syntax">
+<div class="highlight"><pre><span class="nt">&lt;div&gt;</span>hello newT world!&quot;<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+
             </code>
             <p>Pretty painless, right? Since newT.js always returns a valid
             DOM fragment or element, it's easy to just append it to any
@@ -119,22 +120,22 @@ world text.</p>
             Let's make a more robust hello world.</p>
             <p>First, save a new template.</p>
 
-            <code>
-                <pre>
-newT.save("my_template", function(t_data){
-    return (
-        newT.div({clss : "outerdiv" }, "Hello World!", 
-            newT.div( {clss : "innerdiv1" }, t_data.foo ), 
-            newT.div( t_data.bar )
-        )
-    )
-});
-var my_data={ foo : "newT hello world", bar : "w00t!" };
-document.body.appendChild( 
-    newT.render("my_template", my_data ) 
-);
+            <code class="syntax">
+<div class="highlight"><pre><span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;my_template&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">t_data</span><span class="p">){</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">({</span><span class="nx">clss</span> <span class="o">:</span> <span class="s2">&quot;outerdiv&quot;</span> <span class="p">},</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">,</span> 
+            <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">(</span> <span class="p">{</span><span class="nx">clss</span> <span class="o">:</span> <span class="s2">&quot;innerdiv1&quot;</span> <span class="p">},</span> <span class="nx">t_data</span><span class="p">.</span><span class="nx">foo</span> <span class="p">),</span> 
+            <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">(</span> <span class="nx">t_data</span><span class="p">.</span><span class="nx">bar</span> <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">});</span>
+<span class="kd">var</span> <span class="nx">my_data</span><span class="o">=</span><span class="p">{</span> <span class="nx">foo</span> <span class="o">:</span> <span class="s2">&quot;newT hello world&quot;</span><span class="p">,</span> <span class="nx">bar</span> <span class="o">:</span> <span class="s2">&quot;w00t!&quot;</span> <span class="p">};</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> 
+    <span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">&quot;my_template&quot;</span><span class="p">,</span> <span class="nx">my_data</span> <span class="p">)</span> 
+<span class="p">);</span>
+</pre></div>
 
-                </pre>
+
             </code>
 
             <p>Let's go line by line. Saving a template looks the same,
@@ -148,13 +149,13 @@ document.body.appendChild(
             children elements of "outerdiv".</p>
 
 
-            <code>
-                <pre>
-&lt;div class="outerdiv">Hello World!
-    &lt;div class="innerdiv1">newT hello world&lt;/div>
-    &lt;div>w00t!&lt;/div>
-&lt;/div>
-                </pre>
+            <code class="syntax">
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;outerdiv&quot;</span><span class="nt">&gt;</span>Hello World!
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;innerdiv1&quot;</span><span class="nt">&gt;</span>newT hello world<span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div&gt;</span>w00t!<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+            
             </code>
             <p><a href="examples/helloworld.html">See the example</a> and
             <a href="https://github.com/jeffreytierney/newT/blob/master/examples/helloworld.html">grab the
