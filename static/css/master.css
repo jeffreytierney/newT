@@ -20,18 +20,18 @@ a {
     margin:8px 120px 25px 0;
 }
 .main_content h2 {
-    margin:5px 0 10px;
+    margin:10px 0 15px;
 }
 #top {
-    margin:15px 0px 30px;
+    margin:20px 0px 30px;
 }
 #top h1 {
-    font-size:64px;
+    font-size:72px;
 }
 #top p {
     color:#999;
-    margin:5px 0 0;
-    font-size:23px;
+    margin:0px 0 0;
+    font-size:25px;
 }
 ol {
     list-style-position:inside;
