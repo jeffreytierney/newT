@@ -11,6 +11,12 @@
 <script type="text/javascript" charset="utf-8" src="../newT.js"></script>
 <script type="text/javascript" charset="utf-8">
 
+    /*In this example newT is used to deal efficiently with tabular data that has ambiguous dimensions.
+     *It will work with the data provided but also with data that has 20x as many fields and 20x as many rows.
+     *
+     *We use nested iteration and construct document fragments with newT.each();
+     *
+     */
     theData= {
         names: ["3 week average (daily)", "Daily totals"] ,
         dataArray: [
