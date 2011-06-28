@@ -36,14 +36,74 @@
         </div>
         <h2>Add newT.js</h2>
         <div class="">
+            <p>To get started, add newT.js to your page. </p>
             <code type="html">
-            &lt;script src="newT.js" type="text/javascript">&lt;/script>
+                <pre>
+&lt;script src="newT.js" type="text/javascript">&lt;/script>
+                </pre>
             </code>
+        </div>
+
+        <div id="">
+            <p>Using newT.js is simple, there are 3 basic actions</p>
+            <ol>
+                <li>Save a Template</li>
+                <li>Create a DOM Elememt</li>
+                <li>Render a Template</li>
+            </ol>
+
+            <p>Set #2 is technically a substep of step #1, but that's
+            splitting hairs and we only care about fast templating.
+            Let's continue.</p>
+
+            
+        </div>
+
+        <div id="">
+            <h2>Save a newT.js Template</h2>
+            <p>Let's start by making a cheesy helloworld template.</p>
+            <code>
+                <pre  type="javascript">
+newT.save("helloworld", function(data){
+    return newT.div( data.text );
+});
+                </pre>
+            </code>
+
+            <p>Wow, that's a lot of code! Well, not really, but let's
+            review what just happened. the <b>newT.save</b> gets two
+            arguments. The first is the name of the template. We can
+            reference any newT.js template later using this name. </p>
+
+            <p>The second argument is an anonymous function, we'll use
+            this later to pass in our dynamic data on render. This
+            anonymous function will return our hello world template,
+            ready for DOM insertion. Here, we are using a simple DIV,
+            let's not get too crazy, yet!</p>
+
+        </div>
+
+        <div id="">
+            <h2>Render a newT.js Template</h2>
+            <p>Onto step #3, rendering the cheesy helloworld template.</p>
+
+            <code>
+                <pre type="javascript">
+document.body.appendChild( 
+    newT.render( "helloword" { 
+        text : "hello newT world!" 
+    })
+);
+                </pre>
+            </code>
+            <p>Pretty painless, right? Since newT.js always returns a valid
+            DOM frag or element, it's easy to just append it to any
+            element, in this case, the body tag.</p>
         </div>
         
     </div> <!-- end #middle -->
     <div id="footer">
-        Lovingly crafted in the Greater New York Area. 
+        © Copyright 2011. Lovingly crafted in the Greater New York Area. 
     </div>
         
 </div>
