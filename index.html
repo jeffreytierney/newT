@@ -17,7 +17,7 @@
         <div class="">
         <p>
             You love building JavaScript apps. Armed with the latest
-            tools, you're dying for a tasty little JS template, that has
+            tools, you're dying for a tasty little JS template that has
             a friendly syntax, low learning curve and lots of room to
             grow. Enter newT.js, tasty JavaScript templating.
             </p>
@@ -45,14 +45,14 @@
         </div>
 
         <div id="">
-            <p>Using newT.js is simple, there are 3 basic actions</p>
+            <p>Using newT.js is simple, just 3 basic steps</p>
             <ol>
                 <li>Save a Template</li>
                 <li>Create a DOM Elememt</li>
                 <li>Render a Template</li>
             </ol>
 
-            <p>Set #2 is technically a substep of step #1, but that's
+            <p>Step #2 is technically a substep of step #1, but that's
             splitting hairs and we only care about fast templating.
             Let's continue.</p>
 
@@ -61,7 +61,9 @@
 
         <div id="">
             <h2>Save a newT.js Template</h2>
-            <p>Let's start by making a cheesy helloworld template.</p>
+            <p>No overiew or tutorial would be complete without a cheesy hello world
+example. Let's start with a simple template, a DIV with some dynamically
+injected text for flavor.</p>
             <code>
                 <pre  type="javascript">
 newT.save("helloworld", function(data){
@@ -76,7 +78,7 @@ newT.save("helloworld", function(data){
             reference any newT.js template later using this name. </p>
 
             <p>The second argument is an anonymous function, we'll use
-            this later to pass in our dynamic data on render. This
+            it later to pass in some dynamic data. This
             anonymous function will return our hello world template,
             ready for DOM insertion. Here, we are using a simple DIV,
             let's not get too crazy, yet!</p>
@@ -85,7 +87,7 @@ newT.save("helloworld", function(data){
 
         <div id="">
             <h2>Render a newT.js Template</h2>
-            <p>Onto step #3, rendering the cheesy helloworld template.</p>
+            <p>Onto step #3, rendering the cheesy hello world example.</p>
 
             <code>
                 <pre type="javascript">
@@ -95,10 +97,67 @@ document.body.appendChild(
     })
 );
                 </pre>
+            
+            </code>
+            <p>Adds a new DIV element to the body element with the hello
+world text.</p>
+            <code>
+                <pre type="javascript">
+&lt;div>hello newT world!"&lt;/div>
+                </pre>
             </code>
             <p>Pretty painless, right? Since newT.js always returns a valid
             DOM fragment or element, it's easy to just append it to any
             element, in this case, the body tag.</p>
+        </div>
+
+        <div id="">
+            <h2>Going Deeper with newT.js</h2>
+            <p>Rendering a single element is great, but it's much more
+            likely you'll need to create a more complex HTML structure.
+            Let's make a more robust hello world.</p>
+            <p>First, save a new template.</p>
+
+            <code>
+                <pre>
+newT.save("my_template", function(t_data){
+    return (
+        newT.div({clss : "outerdiv" }, "Hello World!", 
+            newT.div( {clss : "innerdiv1" }, t_data.foo ), 
+            newT.div( t_data.bar )
+        )
+    )
+});
+var my_data={ foo : "newT hello world", bar : "w00t!" };
+document.body.appendChild( 
+    newT.render("my_template", my_data ) 
+);
+
+                </pre>
+            </code>
+
+            <p>Let's go line by line. Saving a template looks the same,
+            give it a name and a render method. This method needs to
+            return a DOM element or fragment.</p>
+
+            <p>This return is a little more complex looking, but it's
+            also very simple. Our first element, has a CSS class of
+            "outerdiv". The second argument is the string we want to
+            appear in side the DIV. The 3rd and 4th arguments will be
+            children elements of "outerdiv".</p>
+
+
+            <code>
+                <pre>
+&lt;div class="outerdiv">Hello World!
+    &lt;div class="innerdiv1">newT hello world&lt;/div>
+    &lt;div>w00t!&lt;/div>
+&lt;/div>
+                </pre>
+            </code>
+            <p><a href="examples/helloworld.html">See the example</a> and
+            <a href="https://github.com/jeffreytierney/newT/blob/master/examples/helloworld.html">grab the
+                code</a>.</p>
         </div>
 
         <div>
@@ -119,7 +178,7 @@ document.body.appendChild(
             within reach. Check out this  <a
                 href="examples/slideshow_wdgt.html">Cute Kitten
                 Slideshow</a> to see a demo of a more complex
-            application. <a
+            application leveraging newT.js. <a
                 href="https://github.com/jeffreytierney/newT/blob/master/examples/slideshow_wdgt.html">Grab the code</a> and give it a try!</p>
             
            

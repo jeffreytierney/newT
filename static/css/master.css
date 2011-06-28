@@ -11,13 +11,13 @@ a {
     color:#69c;
 }
 #container {
-    width:600px;
+    width:620px;
     margin:0 auto 100px;
 }
 .main_content p {
     font-size:18px;
     line-height:1.5em;
-    margin:8px 100px 25px 0;
+    margin:8px 120px 25px 0;
 }
 .main_content h2 {
     margin:5px 0 10px;
