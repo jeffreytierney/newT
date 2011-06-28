@@ -1,13 +1,10 @@
-newT
+newT.js
 ====
-
 Tasty JavaScript Templating.
 
 
 Learn it over lunch, release a production quality site by dinner. Nom
 Nom n0m. [Read more on newtjs.org](http://newtjs.org)
-
-
 
 
 Usage
@@ -42,9 +39,20 @@ Find even more [examples on using newT.js](http://newtjs.org) or check out the [
 folder](https://github.com/jeffreytierney/newT/tree/master/examples)
 
 
+License
+====
+
+Copyright 2010, 2011 Jeff Tierney. 
+Lovingly crafted in the Greater New York Area.
+
+Licensed under MIT. See full license [MIT-LICENSE](https://github.com/jeffreytierney/newT/blob/master/MIT-LICENSE)
+
+
 Authors
 ===
 
-jeffrey tierney | https://twitter.com/jeffreytierney
-gregory tomlinson | https://twitter.com/gregory80
+[jeffrey tierney](https://twitter.com/jeffreytierney) and  
+[gregory tomlinson](https://twitter.com/gregory80) 
+
+
 
