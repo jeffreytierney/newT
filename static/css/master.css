@@ -5,14 +5,28 @@ body {
 }
 
 #container {
-    width:420px;
-    margin:0 auto;
+    width:600px;
+    margin:0 auto 100px;
 }
 .main_content p {
     font-size:16px;
     line-height:1.5em;
-    margin:8px 0 15px;
+    margin:8px 120px 15px 0;
 }
 #top {
-    margin:15px 0 30px;
+    margin:15px 0px 30px;
+}
+code {
+    display:block;
+    background:#00DD99;
+    padding:10px 5px;
+    color:#333;
+    border:1px solid #ccc;
+    margin:2px 0 10px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: Bitstream Vera Sans Mono,monospace
+    
 }
