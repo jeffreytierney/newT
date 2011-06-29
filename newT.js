@@ -70,7 +70,10 @@
   // internally refer to it as T for brevity sake
   var T = function(options) {
     this.init(options || {});
-  }, regex_pattern=/\<[^\>]+\>|\&[^ ]+;/;
+  }, regex_pattern=/\<[^\>]+\>|\&[^ ]+;/,
+
+  slice = Array.prototype.slice,
+  dFrag = document.createDocumentFragment;
   
   T.prototype = {
     constructor: T.prototype.constructor,
@@ -218,7 +221,7 @@
     // content (optional) -> arbitrarily many pieces of content to be added within the element
     //                       can be strings, domElements, or anything that evaluates to either of those
     element: function(type, attributes, content) {
-      var args = Array.prototype.slice.call(arguments).slice(1),
+      var args = slice.call(arguments).slice(1),
           el = (type==="frag" ? document.createDocumentFragment() : document.createElement(type));
       if(args.length) {
         content = args;
@@ -360,11 +363,14 @@
       var _this = this;
       for(var i=0, len=els.length; i<len; i++) (function(el) {
         _this.extend(el, function() {
-          var args = Array.prototype.slice.call(arguments);
+          var args = slice.call(arguments);
           args.unshift(el);
           return T.prototype.element.apply(_this, args);
         }, force, local);
       })(els[i]);
+
+      delete _this;
+
       return this;
     },
     noConflict: function(new_name) {
