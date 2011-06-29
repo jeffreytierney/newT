@@ -71,7 +71,7 @@
   var T = function(options) {
     this.init(options || {});
   }, regex_pattern=/\<[^\>]+\>|\&[^ ]+;/,
-  el_cache = {};
+  el_cache = {},
   slice = Array.prototype.slice;
   
   T.prototype = {
@@ -217,9 +217,9 @@
       return this;
     },
     _createEl: function(type) {
-      if (type in el_cache && el_cache[type].cloneNode) { return el_cache[type].cloneNode();}
+      if (type in el_cache && el_cache[type].cloneNode) { return el_cache[type].cloneNode(false);}
       el_cache[type] = document.createElement(type);
-      return el_cache[type].cloneNode();
+      return el_cache[type].cloneNode(false);
     },
     // generic version of the function used to build the element specific creation functions
     // type -> name of element to create
