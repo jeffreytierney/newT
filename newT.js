@@ -71,7 +71,7 @@
   var T = function(options) {
     this.init(options || {});
   }, regex_pattern=/\<[^\>]+\>|\&[^ ]+;/,
-
+  el_cache = {};
   slice = Array.prototype.slice;
   
   T.prototype = {
@@ -216,6 +216,11 @@
       
       return this;
     },
+    _createEl: function(type) {
+      if (type in el_cache && el_cache[type].cloneNode) { return el_cache[type].cloneNode();}
+      el_cache[type] = document.createElement(type);
+      return el_cache[type].cloneNode();
+    },
     // generic version of the function used to build the element specific creation functions
     // type -> name of element to create
     // attributes (optional) -> object with key/value pairs for attributes to be added to the element
@@ -225,7 +230,7 @@
     //                       can be strings, domElements, or anything that evaluates to either of those
     element: function(type, attributes, content) {
       var args = slice.call(arguments, 1),
-          el = (type==="frag" ? document.createDocumentFragment() : document.createElement(type));
+          el = (type==="frag" ? document.createDocumentFragment() : this._createEl(type));
       if(args.length) {
         content = args;
       }
