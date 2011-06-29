@@ -72,8 +72,7 @@
     this.init(options || {});
   }, regex_pattern=/\<[^\>]+\>|\&[^ ]+;/,
 
-  slice = Array.prototype.slice,
-  dFrag = document.createDocumentFragment;
+  slice = Array.prototype.slice;
   
   T.prototype = {
     constructor: T.prototype.constructor,
