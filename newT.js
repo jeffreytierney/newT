@@ -128,7 +128,7 @@
       
       new_el = this.templates[ns][name](opts.data, opts._i, opts._idx);
       if(typeof new_el === "object" && new_el.length > 0) {
-        _new_el=new_el.slice(0);
+        _new_el=new_el;
         new_el=document.createDocumentFragment();
         for(i in _new_el) {
             new_el.appendChild( _new_el[i] );
