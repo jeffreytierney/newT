@@ -106,7 +106,9 @@
     render: function(name, data, opts) {
       var name_parts = name.split("."),
           ns = "global",
-          new_el;
+          new_el,
+          ret,
+          _new_el, i;
       name = name_parts[0];
       if(name_parts.length > 1) {
         ns = name_parts[1];
@@ -120,15 +122,15 @@
       // use either the specified scope, or the default of null (set earlier)
       // params
       if (opts.preData) { opts.data = opts.preData.call(opts.scope, opts.data); }
-      if (opts.pre) { var ret = opts.pre.call(opts.scope, opts.data); }
+      if (opts.pre) { ret = opts.pre.call(opts.scope, opts.data); }
       
       this.cur_options = opts;
       
       new_el = this.templates[ns][name](opts.data, opts._i, opts._idx);
       if(typeof new_el === "object" && new_el.length > 0) {
-        var _new_el=new_el.slice(0);
+        _new_el=new_el.slice(0);
         new_el=document.createDocumentFragment();
-        for(var i in _new_el) {
+        for(i in _new_el) {
             new_el.appendChild( _new_el[i] );
         }
       }
@@ -142,6 +144,7 @@
       if (opts.post) { opts.post.call(opts.scope, new_el, opts.data); }
       
       this.cur_options = null;
+      delete opts;
       return new_el;
     },
     renderToString: function(name, data, opts) {
@@ -161,15 +164,16 @@
       // dont set cur_options here because that happens in render
       opts = opts || {};
       if(!this.checkRender(opts)) { return ""; }
-      var frag = document.createDocumentFragment(), idx=0;
+      var frag = document.createDocumentFragment(), idx=0, i;
       opts.el = frag;
-      for(var i in data) {
+      for(i in data) {
         if(data.hasOwnProperty(i)) {
           opts["_i"] = i;
           opts["_idx"] = idx++;
           this.render(template_name, data[i], opts);
         }
       }
+      delete opts;
       return frag;
     },
     // more free form iterator function that allows passing an ad-hoc
@@ -179,8 +183,8 @@
       opts = opts || {};
       if(!this.checkRender(opts)) { return ""; }
       this.cur_options = opts;
-      var frag = document.createDocumentFragment(), child, idx=0;
-      for(var i in data) {
+      var frag = document.createDocumentFragment(), child, idx=0, i;
+      for(i in data) {
         if(data.hasOwnProperty(i)) {
           child = func(data[i], i, idx);
           if(child) {
@@ -220,7 +224,7 @@
     // content (optional) -> arbitrarily many pieces of content to be added within the element
     //                       can be strings, domElements, or anything that evaluates to either of those
     element: function(type, attributes, content) {
-      var args = slice.call(arguments).slice(1),
+      var args = slice.call(arguments, 1),
           el = (type==="frag" ? document.createDocumentFragment() : document.createElement(type));
       if(args.length) {
         content = args;
