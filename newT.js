@@ -363,12 +363,12 @@
     },
     addEls: function(els, force, local) {
       if(typeof els === "string") { els = els.split(" "); }
-      var _this = this;
+      var _this = this, args, p_elem=T.prototype.element;
       for(var i=0, len=els.length; i<len; i++) (function(el) {
         _this.extend(el, function() {
-          var args = slice.call(arguments);
-          args.unshift(el);
-          return T.prototype.element.apply(_this, args);
+              args = slice.call(arguments);
+              args.unshift(el);
+              return p_elem.apply(_this, args);
         }, force, local);
       })(els[i]);
 
