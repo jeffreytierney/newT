@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <title>XSS Defend</title>
+                
+</head>
+<body>
+    <div id="myElem"></div>
+    <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../newT.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        
+var my_template = newT.save("cache_reference", function(data){
+        return newT.div( {id : "cache_it"}, 
+            newT.div("newT.js - safe!"),
+            data.foo
+        );
+        
+});
+
+// auto append to the body using newT.render opts (3rd argument)
+
+var matches = document.location.search.match(/both=([^&]+)/i);
+var inject_value='<script>alert(/XSS/.source);<\/script>';
+   
+    // using a library to add DOM data
+if(matches && matches.length > 1) {
+    var xss = decodeURIComponent(matches.pop());
+    if(xss === "true") {
+        $("#myElem").html( inject_value );
+    }
+}
+newT.render("cache_reference", { foo : inject_value }, {
+el : document.body,
+safe_mode : true
+});
+
+
+    </script>
+</body>
+</html>
