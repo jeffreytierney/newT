@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -34,8 +35,8 @@
             in the fight against persistent XSS attacks.</p>
 
             <p>How do you get all these awesome features? Easy, <a
-                href="https://raw.github.com/jeffreytierney/newT/master/newT.js">get
-            newT.min.js</a> and follow
+                href="https://raw.github.com/jeffreytierney/newT/master/newT.min.js">get
+            newT.js</a> and follow
             the instructions below for tasty JS templating</p>
         </div>
         <h2>Add newT.js</h2>
@@ -132,7 +133,9 @@ world text.</p>
         <span class="p">)</span>
     <span class="p">)</span>
 <span class="p">});</span>
+
 <span class="kd">var</span> <span class="nx">my_data</span><span class="o">=</span><span class="p">{</span> <span class="nx">foo</span> <span class="o">:</span> <span class="s2">&quot;newT hello world&quot;</span><span class="p">,</span> <span class="nx">bar</span> <span class="o">:</span> <span class="s2">&quot;w00t!&quot;</span> <span class="p">};</span>
+
 <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> 
     <span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">&quot;my_template&quot;</span><span class="p">,</span> <span class="nx">my_data</span> <span class="p">)</span> 
 <span class="p">);</span>
@@ -180,6 +183,7 @@ example.</p>
 <span class="p">})</span>
         
 <span class="kd">var</span> <span class="nx">nodes</span> <span class="o">=</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">&quot;top_level&quot;</span><span class="p">,</span> <span class="p">{});</span>
+
 <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> <span class="nx">nodes</span> <span class="p">);</span>
 </pre></div>
 
