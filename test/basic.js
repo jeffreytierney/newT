@@ -140,15 +140,15 @@ test("safeMode", function() {
 
   expect(3)
 
-  var p_unsafe = newT.p(str);
-  newT.safeMode();
   var p_safe = newT.p(str);
   newT.safeMode(false);
-  var p_unsafe_2 = newT.p(str);
+  var p_unsafe = newT.p(str);
+  newT.safeMode();
+  var p_safe_2 = newT.p(str);
 
-  equal(p_unsafe.firstChild.nodeType, 1, "BEFORE safe mode is triggered innerHTML should be used on html string and first child is nodeType == 1");
-  equal(p_safe.firstChild.nodeType, 3, "AFTER safe mode is triggered textNode should be used on html string and first child is nodeType == 3");
-  equal(p_unsafe_2.firstChild.nodeType, 1, "AFTER safe mode is turned off innerHTML should be used on html string and first child is nodeType == 1");
+  equal(p_safe.firstChild.nodeType, 3, "BEFORE safe mode is turned off textNode should be used on html string and first child is nodeType == 3");
+  equal(p_unsafe.firstChild.nodeType, 1, "AFTER safe mode is turned off innerHTML should be used on html string and first child is nodeType == 1");
+  equal(p_safe_2.firstChild.nodeType, 3, "BEFORE safe mode is turned off textNode should be used on html string and first child is nodeType == 3");
   
 });
 
@@ -156,11 +156,11 @@ test("safeMode", function() {
 test("isSafeMode", function() {
 
   expect(3)
-  ok(!newT.isSafeMode(), "safe mode defaults to false");
-  newT.safeMode();
-  ok(newT.isSafeMode(), "safe mode should be on after calling newT.safeMode() (even with no params)");
+  ok(newT.isSafeMode(), "safe mode defaults to true");
   newT.safeMode(0);
   ok(!newT.isSafeMode(), "safe mode should be false after calling newT.safeMode(falsy value) with anything that is falsy (except undefined)");
+  newT.safeMode();
+  ok(newT.isSafeMode(), "safe mode should be on after calling newT.safeMode() (even with no params)");
   
 });
 
@@ -173,9 +173,11 @@ test("safeModeTemplateOverride", function() {
     )
   });
   
-  expect(4)
+  expect(5)
 
-  ok(!newT.isSafeMode(), "make sure we are not in global safe mode");
+  ok(newT.isSafeMode(), "make sure we are in global safe mode");
+  newT.safeMode(false)
+  ok(!newT.isSafeMode(), "make sure we are not in global safe mode after turning off");
 
   var p_safe = newT.render("test_template", str, {safe_mode:true});
   newT.safeMode();
@@ -191,9 +193,12 @@ test("safeModeTemplateOverride", function() {
 test("safeModeAttributeOverride", function() {
   var str = '<a href="#" onmouseover="alert(document.cookie)">hi</a>';
 
-  expect(4)
+  expect(5)
 
-  ok(!newT.isSafeMode(), "make sure we are not in global safe mode");
+  ok(newT.isSafeMode(), "make sure we are in global safe mode");
+  newT.safeMode(false)
+  ok(!newT.isSafeMode(), "make sure we are not in global safe mode after turning off");
+
   var p_safe = newT.p({"_safe":true}, str);
   equal(p_safe.firstChild.nodeType, 3, "attribute safe mode (on) method is triggered  which should override global (off), and textNode should be used on html string and first child is nodeType == 3");
 
@@ -208,15 +213,15 @@ test("safeModeAttributeOverride", function() {
 test("setOption", function() {
   expect(3)
 
-  deepEqual(newT.options, {if_attr: "when",local_safe: "_safe",safe_mode: false}, "options should start out equal to defaults");
+  deepEqual(newT.options, {if_attr: "when",local_safe: "_safe",safe_mode: true}, "options should start out equal to defaults");
   
   newT.setOption({if_attr: "iff",local_safe: "_is_safe"});
 
-  deepEqual(newT.options, {if_attr: "iff",local_safe: "_is_safe",safe_mode: false}, "options should be updateable by passing an object as a param");
+  deepEqual(newT.options, {if_attr: "iff",local_safe: "_is_safe",safe_mode: true}, "options should be updateable by passing an object as a param");
 
-  newT.setOption("safe_mode", true);
+  newT.setOption("safe_mode", false);
 
-  deepEqual(newT.options, {if_attr: "iff",local_safe: "_is_safe",safe_mode: true}, "options should be updateable by passing an key as the first param and a vlue as the second");
+  deepEqual(newT.options, {if_attr: "iff",local_safe: "_is_safe",safe_mode: false}, "options should be updateable by passing an key as the first param and a vlue as the second");
 
   
   newT = newT.clone();
