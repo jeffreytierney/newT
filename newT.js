@@ -81,7 +81,7 @@
       this.options = {
         if_attr: "when",
         local_safe: "_safe",
-        safe_mode: false
+        safe_mode: true
       };
       for(var opt in options) { this.options[opt] = options[opt]; }
       this.templates = {};
