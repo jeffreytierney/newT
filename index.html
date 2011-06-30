@@ -17,22 +17,26 @@
 
     <div id="middle" class="main_content">
         <div class="display_box">
-        <p>
+            <p>
             You love building JavaScript apps. Armed with the latest
             tools, you're dying for a tasty little JS template that has
             a friendly syntax, low learning curve and lots of room to
             grow. Enter <a href="https://raw.github.com/jeffreytierney/newT/master/newT.js">newT.js</a>, tasty JavaScript templating.
             </p>
 
-            <p>With a nod to <a href="http://haml-lang.com/" title="Haml">Haml</a> 
-            (and subsequently, <a href="http://edspencer.net/2009/11/jaml-beautiful-html-generation-for-javascript.html" title="Jaml">Jaml</a>), and much love to super templates
-            like mustache.js, newT.js is a pure JS templating engine
-            with the power and flexibility you need. newT.js helps you build
+            <p>With a style initially inspired by the ruby templating language <a href="http://haml-lang.com/" title="Haml">Haml</a>, 
+            and subsequently, <a href="http://edspencer.net/2009/11/jaml-beautiful-html-generation-for-javascript.html" title="Jaml">Jaml</a>, 
+            newT.js is a pure JS templating engine with the power and flexibility you need to build
             powerful, responsive, asynchronous JavaScript applications.
-            newT.js syntax eliminates tedious closing and
-            balancing of HTML tags and it's tiny [4.6KB] (less than 2KB gzipped), while providing flexible template
-            options. And, newT.js helps you build a safer site, aiding
-            in the fight against persistent XSS attacks.</p>
+            </p>
+            
+            <p>
+            newT.js syntax eliminates the tedious closing and balancing of HTML tags  
+            while providing a simple way to create elements and define attributes on them.
+            The source is tiny (4.6KB, less than 2KB gzipped), but it provides you with flexible template
+            options, and is designed to help you build a safer site, arming you 
+            in the fight against persistent <a href="http://en.wikipedia.org/wiki/Cross-site_scripting" title="XSS on Wikipedia">XSS</a> attacks.
+            </p>
 
 
             <p>How do you get all these awesome features? Easy, <a
@@ -53,23 +57,17 @@ class="na">src=</span><span class="s">&quot;newT.min.js&quot;</span> <span class
         </div>
 
         <div id="">
-            <p>Using newT.js is simple, just 3 basic steps</p>
+            <p>Using newT.js is simple... there are just 2 basic steps</p>
             <ol>
                 <li>Save a Template</li>
-                <li>Create a DOM Elememt</li>
                 <li>Render a Template</li>
             </ol>
-
-            <p>Step #2 is technically a substep of step #1, but that's
-            splitting hairs and we only care about fast templating.
-            Let's continue.</p>
-
             
         </div>
 
         <div id="" class="display_box">
             <h2>Save a newT.js Template</h2>
-            <p>No overiew or tutorial would be complete without a cheesy hello world
+            <p>No overview or tutorial would be complete without a cheesy hello world
 example. Let's start with a simple template, a DIV with some dynamically
 injected text for flavor.</p>
             <code class="syntax">
@@ -81,13 +79,18 @@ injected text for flavor.</p>
 
             </code>
 
-            <p>Wow, that's a lot of code! Well, not really, but let's
+            <p>
+                &lt;sarcasm&gt;Wow, that's a lot of code!&lt;/sarcasm&gt;
+            </p>
+            <p>
+                Well, not really, but let's
             review what just happened. the <b>newT.save</b> method takes two
             arguments. The first is the name of the template. We can
             reference any newT.js template later using this name. </p>
 
-            <p>The second argument is an anonymous function, we'll use
-            it later to pass in some dynamic data. This
+            <p>The second argument is an anonymous function (you could also use a 
+                previously created named function). we'll use
+            this later to pass in some dynamic data. This
             anonymous function will return our hello world template,
             ready for DOM insertion. Here, we are using a simple DIV,
             let's not get too crazy, yet!</p>
@@ -101,14 +104,14 @@ injected text for flavor.</p>
             <code class="syntax">
 
 <div class="highlight"><pre><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> 
-    <span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span> <span class="s2">&quot;helloword&quot;</span> <span class="p">{</span> 
+    <span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span> <span class="s2">&quot;helloworld&quot;</span> <span class="p">{</span> 
         <span class="nx">text</span> <span class="o">:</span> <span class="s2">&quot;hello newT world!&quot;</span> 
     <span class="p">})</span>
 <span class="p">);</span>
 </pre></div>
             
             </code>
-            <p>Adds a new DIV element to the body element with the hello
+            <p>This call adds a new DIV element to the body element with the hello
 world text.</p>
 <code class="syntax">
 <div class="highlight"><pre><span class="nt">&lt;div&gt;</span>hello newT world!&quot;<span class="nt">&lt;/div&gt;</span>
@@ -146,6 +149,9 @@ world text.</p>
 
 
             </code>
+            <p>* - Note the use of clss instead of class for setting the element's class attribute... 
+                using class as an object key is a no-no in some browsers *cough* IE *cough*, 
+                so newT requires that you use either "clss" or "classname" to set the class attribute</p>
 
             <p>Let's go line by line. Saving a template looks the same,
             give it a name and a render method. This method needs to
@@ -156,7 +162,6 @@ world text.</p>
             "outerdiv". The second argument is the string we want to
             appear in side the DIV. The 3rd and 4th arguments will be
             children elements of "outerdiv".</p>
-
 
             <code class="syntax">
 <div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;outerdiv&quot;</span><span class="nt">&gt;</span>Hello World!
@@ -169,20 +174,31 @@ world text.</p>
             <p><a href="examples/helloworld.html">See the example</a> and
             <a href="https://github.com/jeffreytierney/newT/blob/master/examples/helloworld.html">grab the
                 code</a>.</p>
+                
+                <p>As you see in this example, all element creation methods will take an arbitrary number of parameters,
+                    The first of which can optionally be an object literal that defines all attributes to be added to the element,
+                    and the rest are any number of pieces of content that you want to have added to the elemenet.  These pieces of
+                    content can be text, numbers, dom elements, or any function that will return any of those.  newT is flexible in
+                    what you can give it to render, and will know how to turn that into beautifully crafted html dom elements</p>
+            
         </div>
 
 <div class="display_box">
     <h2>No Root Node with newT.js</h2>
 
-<p>When we want to append two nodes, we need to give newT.js an array.
-newT.js will produce a document fragment. Take a look at the below
-example.</p>
+<p>
+    Sometimes we have a situation where we want a template to return multiple nodes, with no individual parent node defined in the template. 
+    For example if we are creating a template to replace the items in a list without recreating the list itself. 
+    We can just tell newT.js to return an array, and newT.js will be smart enough to convert the result to a document fragment 
+    allowing you to safely insert the rendered template anywhere you want. Take a look at the below example.
+</p>
+
 <code class="syntax">
 <div class="highlight"><pre><span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;top_level&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="p">([</span>
+    <span class="k">return</span> <span class="p">([</span>
         <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">),</span>
         <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">(</span><span class="s2">&quot;two&quot;</span><span class="p">)</span>
-        <span class="p">])</span>
+    <span class="p">])</span>
 <span class="p">})</span>
         
 <span class="kd">var</span> <span class="nx">nodes</span> <span class="o">=</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">&quot;top_level&quot;</span><span class="p">,</span> <span class="p">{});</span>
@@ -201,12 +217,12 @@ example.</p>
 </div>
 
 <div class="display_box">
-    <h2>Using newT.eachRender</h2>
-    <p>Let's face it, looping over lists is a common action. Now
-    building DOM lists can be quick and painless, take a look at the
+    <h2>Using newT.eachRender and partials</h2>
+    <p>Let's face it, looping over lists is a common action, but with newT.js
+    building DOM lists can be quick and painless.  Take a look at the
     eachRender method.</p>
     <code class="syntax">
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">a_list</span><span class="o">=</span><span class="p">[{</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">a_list_data</span><span class="o">=</span><span class="p">[{</span>
     <span class="nx">foo</span> <span class="o">:</span> <span class="s2">&quot;one&quot;</span>
 <span class="p">},{</span>
     <span class="nx">foo</span> <span class="o">:</span> <span class="s2">&quot;two&quot;</span>
@@ -223,23 +239,22 @@ example.</p>
 <span class="p">});</span>
 
 <span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;a_list&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-        <span class="k">return</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">ul</span><span class="p">(</span> <span class="p">{</span><span class="nx">clss</span> <span class="o">:</span> <span class="s2">&quot;a_list_class&quot;</span><span class="p">},</span>
+    <span class="k">return</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">ul</span><span class="p">(</span> <span class="p">{</span><span class="nx">clss</span> <span class="o">:</span> <span class="s2">&quot;a_list_class&quot;</span><span class="p">},</span>
         <span class="nx">newT</span><span class="p">.</span><span class="nx">eachRender</span><span class="p">(</span> <span class="nx">data</span><span class="p">,</span> <span class="s2">&quot;items_list&quot;</span><span class="p">)</span>
     <span class="p">)</span>
 <span class="p">});</span>
 
 <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span> 
-    <span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">&quot;a_list&quot;</span><span class="p">,</span> <span class="nx">a_list</span><span class="p">)</span> 
+    <span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">&quot;a_list&quot;</span><span class="p">,</span> <span class="nx">a_list_data</span><span class="p">)</span> 
 <span class="p">);</span>
 </pre></div>
 
     </code>
-    <p>We are going to use two newT templates. "items_list", which
-    is list item, and "a_list", which is the HTML shell.</p>
+    <p>We are going to use two newT templates. "items_list", which is a "partial" that 
+    produces just a list item, and "a_list", which is the parent template that will use eachRender
+    to loop through the data passed in, rendering the partial temple to create a list item element 
+    for each object in the "a_list_data array".</p>
 
-    <p>The "a_list" structure creates an unordered list, and
-    <b>newT.eachRender</b> is its child node(s). Now, when we render "a_list",
-    we can pass in an array of objects.</p>
     <p><a href="examples/each_render.html">See the example</a> and
             <a
                 href="https://github.com/jeffreytierney/newT/blob/master/examples/each_render.html">grab the code</a>.</p>
