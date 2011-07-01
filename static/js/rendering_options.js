@@ -14,4 +14,4 @@ newT.render("simple", { name : "start" }, {
     el : document.body
 });
 
-// appends <div>start preData pre</div
+// appends <div>start preData pre</div>
