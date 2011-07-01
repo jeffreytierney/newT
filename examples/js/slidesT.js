@@ -87,7 +87,7 @@
             page:1,
             license : "",
             text : "cute kitten",
-            api_key : "c8a8e577657c47d24c7835a563a05a00",
+            api_key : "c8a8e577657c47d24c7835a563a05a00", // plz get your own API key from flickr this is the newT example one
             media : "photos"
         },
         init : function() {
@@ -104,8 +104,7 @@
             $elem.append( newT.render("slideshow_box", function(){} ) );
 
             promise.done( function(data) {
-                var frag = self.dom_add_photos(data);
-                $(".outer_slideshow").append( frag );
+                self._insert_data(data);
                 dfr.resolve(data);
             });
             return dfr.promise();
@@ -116,11 +115,15 @@
             self.remote_setup.page+=1;
             var promise = self.search();
             promise.done( function(data) {
-                var frag = self.dom_add_photos(data);
-                $(".outer_slideshow").append( frag );
+                self._insert_data(data);
                 callback && callback(data);
             });
             delete self;
+        },
+        _insert_data : function(data) {
+            var frag = this.dom_add_photos(data);
+            $(".outer_slideshow").append( frag );
+            return data;
         },
 
         dom_add_photos : function( data ) {
