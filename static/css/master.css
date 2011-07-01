@@ -21,13 +21,15 @@ a:hover {
 .main_content p {
     font-size:18px;
     line-height:1.5em;
-    margin:8px 40px 25px 0;
+    margin:8px 40px 20px 0;
 }
 .main_content h2 {
     margin:10px 0 15px;
+    font-size:25px;
 }
 .main_content h3 {
     margin:15px 0 7px;
+    font-size:18px;
 }
 #top {
     margin:20px 0px 30px;
@@ -45,7 +47,7 @@ a:hover {
 }
 ol, ul {
     list-style-position:inside;
-    margin: 0 0 10px 15px;
+    margin: 0 0 20px 15px;
     font-size:18px;
 }
 ol li, ul li {
@@ -56,7 +58,7 @@ code {
     padding:10px 3px 10px 15px;
     border-top:1px solid #ccc;
     border-bottom:1px solid #ccc;
-    margin:5px 0 10px;
+    margin:5px 0 15px;
     clear:both;
     float:none;
     font-size: 15px;
@@ -65,4 +67,7 @@ code {
 }
 #footer {
     font-size:13px;
+}
+.footer_txt {
+    padding-right:180px;
 }

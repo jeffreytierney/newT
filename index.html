@@ -25,7 +25,7 @@
             </p>
 
             <p>With a style initially inspired by the ruby templating language <a href="http://haml-lang.com/" title="Haml">Haml</a>, 
-            and subsequently, <a href="http://edspencer.net/2009/11/jaml-beautiful-html-generation-for-javascript.html" title="Jaml">Jaml</a>, 
+            and subsequently <a href="http://edspencer.net/2009/11/jaml-beautiful-html-generation-for-javascript.html" title="Jaml">Jaml</a>, 
             newT.js is a pure JS templating engine with the power and flexibility you need to build
             powerful, responsive, asynchronous JavaScript applications.
             </p>
@@ -84,7 +84,7 @@ injected text for flavor.</p>
             arguments. The first is the name of the template. We can
             reference any newT.js template later using this name. </p>
 
-            <p>The second argument is an anonymous function.  You could also use a 
+            <p>The second argument is an anonymous function.  We can also use a 
                 previously created named function. We'll use
             this function later to pass in some dynamic data. This
             anonymous function will return our hello world template,
@@ -116,7 +116,7 @@ world text.</p>
             </code>
             <p>Pretty painless, right? Since newT.js always returns a valid
             DOM fragment or element, it's easy to just append it to any
-            element, in this case, the body tag.</p>
+            element, in this case, the body element.</p>
         </div>
 
         <div id="" class="display_box">
@@ -156,12 +156,12 @@ world text.</p>
 
             <p>Now, let's review. Saving a template looks the same,
             give it a name and a render method. In this case,
-            <b>my_template</b> and an anonymous function. This method must
+            <b>my_template</b> and an anonymous function. This function must
             return a DOM element or fragment.</p>
 
             <p>The HTML structure is a little more complex in
             appearance, but it's
-            also very simple. The first element method sets a CSS class of
+            also very simple. The first argument in <b>newT.div</b> sets a CSS class of
             <b>outerdiv</b>. The second argument is the string we want to
             appear inside this DIV. The 3rd and 4th arguments will be
             children elements of <b>outerdiv</b>. An example of the HTML
@@ -266,6 +266,10 @@ world text.</p>
     <p><a href="examples/each_render.html">See the example</a> and
     <a href="https://github.com/jeffreytierney/newT/blob/master/examples/each_render.html">grab the code</a>.</p>
 
+    <p>It's worth noting that newT.js has an additional iterator,
+    <b>newT.each</b>, take a look at the <a href="https://github.com/jeffreytierney/newT/blob/master/newT.js">source code</a> to review the
+            various methods available from newT.js</p>
+
     </div>
 
     <div class="display_box">
@@ -318,7 +322,9 @@ world text.</p>
         <h3>Safe Mode</h3>
         <p>Allowing dynamically injected data from the web or users can
         be risky. Developers must be aware of possible scenarios that
-        could lead to XSS exploits. newT.js wants to help you fight this
+        could lead to <a
+            href="http://en.wikipedia.org/wiki/Cross-site_scripting"
+            title="XSS on Wikipedia">XSS</a> exploits. <a href="https://github.com/jeffreytierney/newT/blob/master/newT.js">newT.js</a> wants to help you fight this
         battle. By default, <b>newT.safeMode</b> is on. This means strings are
         inserted into the DOM using <b>document.createTextNode</b>. From
         a practical viewpoint, this means potential XSS via a malicious
@@ -339,7 +345,9 @@ world text.</p>
         Let's take a look at an example.</p>
 
 <code class="syntax">
-newT.noConflict("safeNewT");
+<div class="highlight"><pre><span class="nx">newT</span><span class="p">.</span><span class="nx">noConflict</span><span class="p">(</span><span class="s2">&quot;safeNewT&quot;</span><span class="p">);</span>
+</pre></div>
+
 </code>
 
         <p>Calling the above will return newT to its original definition,
@@ -347,9 +355,11 @@ before our newT.js script was loaded. Now we can access any newT.js
 methods, like save, in this manner:</p>
 
 <code class="syntax">
-safeNewT.save("my_template", function(data){ 
-    /* return ... */ 
-});
+<div class="highlight"><pre><span class="nx">safeNewT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;my_template&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span> 
+    <span class="cm">/* return ... */</span> 
+<span class="p">});</span>
+</pre></div>
+
 </code>
 
 
@@ -358,9 +368,35 @@ safeNewT.save("my_template", function(data){
         conditional when building newT.js templates, sometimes it's
         useful to declare when an element should be added in
         a more newT.js syntax friendly manner, enter newT.js <b>when</b></p>
-<code class="syntax">
-        
-</code>
+        <code class="syntax">
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">render_tmplte</span><span class="p">(</span> <span class="nx">data</span> <span class="p">){</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">({</span>
+            <span class="nx">when</span> <span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">shown</span><span class="p">,</span> 
+            <span class="nx">clss</span> <span class="o">:</span> <span class="s2">&quot;shown&quot;</span>
+        <span class="p">},</span> <span class="s2">&quot;show me&quot;</span><span class="p">,</span> 
+            <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">({</span> 
+                <span class="nx">when</span> <span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">hidden</span><span class="p">,</span> 
+                <span class="nx">clss</span> <span class="o">:</span> <span class="s2">&quot;hidden&quot;</span>
+            <span class="p">},</span> <span class="s2">&quot;hide me&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">}</span>
+<span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;my_template&quot;</span><span class="p">,</span> <span class="nx">render_tmplte</span><span class="p">);</span>
+<span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">&quot;my_template&quot;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">shown</span> <span class="o">:</span> <span class="mi">1</span><span class="o">==</span><span class="mi">1</span><span class="p">,</span>
+    <span class="nx">hidden</span> <span class="o">:</span> <span class="mi">1</span><span class="o">!=</span><span class="mi">1</span>
+<span class="p">},</span> <span class="p">{</span>
+    <span class="nx">el</span> <span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span>
+<span class="p">});</span>
+</pre></div>
+
+
+        </code>
+<p>The newT.js <b>when</b> syntax allows us to leverage an element's attribute
+object to control its display. In the above example, the child div
+<b>hide me</b> is hidden because 1!=1 is false. Setting this value to true, would
+add the element.</p>
 
         <h3>newT.clone</h3>
         <p>If you want a separate instance of the newT object, perhaps to
@@ -368,39 +404,114 @@ safeNewT.save("my_template", function(data){
         return a freshly initialized copy of newT, with a clean template
         namespace.</p>
         <code class="syntax">
-var myProjectT = newT.clone();
-myProject.save("project_template", function(data){ 
-    /* return ... */  
-});
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">myProjectT</span> <span class="o">=</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">clone</span><span class="p">();</span>
+<span class="nx">myProject</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;project_template&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span> 
+    <span class="cm">/* return ... */</span>  
+<span class="p">});</span>
+</pre></div>
+
 </code>
 <p>Note that <b>myProjectT</b> will not have access to the templates
 saved via <b>newT.save</b> and vice versa.</p>
 
         <h3>newT.extend</h3>
-        <p></p>
+        <p>The power of DOM templating isn't limited to core methods of
+        newT.js. We can extend newT.js, adding new functions or replacing
+        existing. Let's add a method to show us all global templates
+        called <b>newT.getGlobalTemplates</b>.</p>
 <code class="syntax">
-        
+<div class="highlight"><pre><span class="c1">// add a simple template for example</span>
+<span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="k">return</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">(</span><span class="s2">&quot;simple&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+
+
+<span class="kd">var</span> <span class="nx">force</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">add_to_prototype</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+<span class="nx">newT</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="s2">&quot;getGlobalTemplates&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">templates</span><span class="p">.</span><span class="nx">global</span> <span class="o">||</span> <span class="p">{};</span>
+<span class="p">},</span> <span class="nx">force</span><span class="p">,</span> <span class="nx">add_to_prototype</span><span class="p">);</span>
+
+<span class="nx">newT</span><span class="p">.</span><span class="nx">showGlobalTemplates</span><span class="p">();</span>
+</pre></div>
+
+
 </code>
+<p>First we need to save a basic example template so that newT.js has a
+template to show. Then, we can extend newT.js to include our new method.
+The 3rd and 4th arguments are optional, they control whether our new
+method should replace any existing methods by that name, and whether to
+add the method to the local object or the newT.js prototype,
+respectively.</p>
 
         <h3>Rendering Options</h3>
-        <p></p>
+        <p>Several options are available to <b>newT.render</b>.
+        Most of its flexibility revolves around managing and massaging
+        the data being provided to the template, but there are also
+        controls for execution scope and auto appending.</p>
 <code class="syntax">
-        
+<div class="highlight"><pre><span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">({},</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">newT</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">name</span> <span class="o">:</span> <span class="s2">&quot;start&quot;</span> <span class="p">},</span> <span class="p">{</span>
+    <span class="nx">pre</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="o">+=</span><span class="s2">&quot;pre&quot;</span>
+        <span class="k">return</span> <span class="nx">data</span>
+    <span class="p">},</span>
+    <span class="nx">preData</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="o">+=</span><span class="s2">&quot; preData &quot;</span>
+        <span class="k">return</span> <span class="nx">data</span>
+    <span class="p">},</span>
+    <span class="nx">el</span> <span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span>
+<span class="p">});</span>
+
+<span class="c1">// appends &lt;div&gt;start preData pre&lt;/div</span>
+</pre></div>
+       
 </code>
 
 
         <h3>Template Namespace</h3>
         <p>newT.js makes it easy to access the same template across
-        mutiple functions or files on a page. Since newT.js takes a spot
-        in the global namespace, <b>window.newT</b>, it allows us to
+        mutiple functions or files on a page. Since newT.js exists in the global namespace, <b>window.newT</b>, it allows us to
         create a template in one method, and render it later with
         dynamic data. This pattern makes it extremely helpful in
         asynchronous applications.</p>
         <p>Let's take a look at where templates are stored and how to
-        prevent collisions inside the newT template namespace.</p>
+        prevent collisions inside the newT template namespace. We'll
+        start by saving a new template, then taking a look how that
+        template is stored inside newT.js</p>
 <code class="syntax">
-        
+newT.save("simple", function(data){
+    return newT.div({}, data.name);
+});
+
+
+// By default, my_template is saved
+// under newT.templates.global
+console.log(newT.templates.global);
 </code>
+
+<p>While we should never need to refer to
+<b>newT.templates.global.my_template</b> directly, we can. newT.js goes
+to great lengths to ensure any behavior or option can be accessed, changed or
+extended to fit any project or application. However, this global
+availability isn't cause for concern either. newT.js allows us to save
+templates under different namespaces besides global, using a reverse
+domain syntax. For example </p>
+<code class="syntax">
+newT.save("bar.foo", function(data){
+    return newT.div({}, data.name);
+});
+
+console.log(newT.templates.foo);
+</code>
+
+<p>If reverse domain syntax isn't used, the .global is implied, storing
+the template in the global Object namespace, as is the case for the previous
+examples.</p>
 
 
 
@@ -448,7 +559,9 @@ newT.tar.gz </a></p>
     </div>
  </div> <!-- end #middle -->
 <div id="footer">
-    © Copyright 2011. Lovingly crafted in the Greater New York Area. 
+    <div class="footer_txt">© Copyright 2011<br/> Lovingly crafted in the Greater New York Area.
+    This page includes newT.js, interact with it through your JavaScript
+    console. </div>
 </div>
         
 </div>
@@ -456,7 +569,8 @@ newT.tar.gz </a></p>
 <a href="https://github.com/jeffreytierney/newT"><img style="position: fixed; top: 0; right: 0; border: 0;"
   src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
-
+<!-- include newT.js on the page for users to play with / access -->
+<script type="text/javascript" charset="utf-8" src="newT.js"></script>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
