@@ -484,14 +484,17 @@ respectively.</p>
         start by saving a new template, then taking a look how that
         template is stored inside newT.js</p>
 <code class="syntax">
-newT.save("simple", function(data){
-    return newT.div({}, data.name);
-});
+<div class="highlight"><pre><span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">({},</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+<span class="p">});</span>
 
 
-// By default, my_template is saved
-// under newT.templates.global
-console.log(newT.templates.global);
+<span class="c1">// By default, my_template is saved</span>
+<span class="c1">// under newT.templates.global</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">newT</span><span class="p">.</span><span class="nx">templates</span><span class="p">.</span><span class="nx">global</span><span class="p">);</span>
+</pre></div>
+
+
 </code>
 
 <p>While we should never need to refer to
@@ -502,11 +505,14 @@ availability isn't cause for concern either. newT.js allows us to save
 templates under different namespaces besides global, using a reverse
 domain syntax. For example </p>
 <code class="syntax">
-newT.save("bar.foo", function(data){
-    return newT.div({}, data.name);
-});
+<div class="highlight"><pre><span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;bar.foo&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">({},</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+<span class="p">});</span>
 
-console.log(newT.templates.foo);
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">newT</span><span class="p">.</span><span class="nx">templates</span><span class="p">.</span><span class="nx">foo</span><span class="p">);</span>
+</pre></div>
+
+
 </code>
 
 <p>If reverse domain syntax isn't used, the .global is implied, storing
