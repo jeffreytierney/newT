@@ -3,7 +3,7 @@
 *       
 *   depndencies:
 *       jQuery-1.5+
-*       newT 1.0+
+*       newT.js 1.0+
 * */
 
 (function(window, undefined) {
@@ -14,12 +14,16 @@
     }
     nT.prototype = {
         // display newt_twitter widget username stream
-        show : function( el, username, count ) {
+        show : function( el, screenname, count ) {
             var self=this, 
-                promise=self.remote( username, count );
+                promise=self.remote( screenname, count );
 
             promise.done(function(data){
-                newT.render(self.templates.box, data, {
+                var params = {
+                    tweets : data,
+                    username : screenname
+                };
+                newT.render(self.templates.box, params, {
                     "el" : el
                 });
             });
@@ -41,7 +45,15 @@
                 return (
                     newT.div({clss : "tweet_box_shell"},
                         newT.div( 
-                            newT.eachRender( data, self.templates.tweet )
+                            newT.eachRender( data.tweets, self.templates.tweet )
+                        ),
+                        newT.div({
+                                clss : "tweet_follow_box"
+                            },
+                            newT.a({
+                                clss : "tweet_follow",
+                                href : "http://twitter.com/" + data.username
+                            }, "Follow: @" + data.username)
                         )
                     )
                 )
@@ -91,5 +103,5 @@
             return dfr.promise();
         }
     }
-    window.newt_twitter=new nT();
+    window.tweetT=new nT();
 })(window);
