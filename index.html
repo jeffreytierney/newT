@@ -184,7 +184,8 @@ world text.</p>
             an object literal, which defines all attributes to be added to
             the element. All additional arguments become children of
             this element. These arguments can be any format:  string,
-            number, DOM elements or a function. This pattern syntax can
+            number, DOM element, DOM fragment or a function. This pattern of adding
+            arguments to define child nodes can
             be repeated indefinitely, allowing for robust DOM
             structures, while being flexible to your development needs.</p>
             
@@ -265,7 +266,32 @@ world text.</p>
     <p><a href="examples/each_render.html">See the example</a> and
     <a href="https://github.com/jeffreytierney/newT/blob/master/examples/each_render.html">grab the code</a>.</p>
 
-        </div>
+    </div>
+
+    <div class="display_box">
+        <h2>Using newT.js in Widgets</h2>
+        <p>Of course newT.js can be used in widgets! Why wouldn't
+        it? Check out the obligatory <a
+            href="examples/twitter_wdgt.html">twitter widget</a>. <a
+            href="https://github.com/jeffreytierney/newT/blob/master/examples/twitter_wdgt.html">Grab
+            the code</a>, and try it out.</p>
+    </div>
+    
+
+
+    <div class="display_box">
+        <h2>Building Applications with newT.js</h2>
+        <p>Building full featured JS applications is hard work, but
+        it shouldn't be! Make rendering DOM elements a joy by using
+        newT.js. Flexible and reusable templates are
+        within reach. Check out this  <a
+            href="examples/slideshow_wdgt.html">Cute Kitten
+            Slideshow</a> to see a demo of a more complex
+        application leveraging newT.js. <a
+            href="https://github.com/jeffreytierney/newT/blob/master/examples/slideshow_wdgt.html">Grab the code</a> and give it a try!</p>
+        
+       
+    </div>
 
     <div class="display_box">
         <h2>What else can newT.js do?</h2>
@@ -279,71 +305,151 @@ world text.</p>
 
         <ol>
             <li>Safe Mode</li>
-            <li>No Conflict mode</li>
-            <li>Template conditionals</li>
+            <li>No Conflict Mode</li>
+            <li>Template Conditionals</li>
             <li>newT.extend</li>
-            <li>newT.render options</li>
-            <li>Template namespace</li>
+            <li>newT.clone</li>
+            <li>Rendering Options</li>
+            <li>Template Namespace</li>
+            <li>Element Caching</li>
         </ol>
 
+
+        <h3>Safe Mode</h3>
+        <p>Allowing dynamically injected data from the web or users can
+        be risky. Developers must be aware of possible scenarios that
+        could lead to XSS exploits. newT.js wants to help you fight this
+        battle. By default, <b>newT.safeMode</b> is on. This means strings are
+        inserted into the DOM using <b>document.createTextNode</b>. From
+        a practical viewpoint, this means potential XSS via a malicious
+        script tag will appear as a string, not an actual DOM node, preventing
+        the script from executing.</p>
+
+        <p>Safe mode is also flexible, allowing developers to turn it
+        off globally, or on a per rendered element basis. If you're just
+        getting started with newT.js, keep this in the back of your mind
+        for later. Experienced users will appreciate this powerful
+        combination in more complex applications.</p>
+
+
+        <h3>No Conflict Mode</h3>
+        <p>Similar to larger libraries like jQuery, newT.js provides
+        users with <b>newT.noConflict</b>. While you won't always need
+        this method, it's very useful in hostile scripting environments.
+        Let's take a look at an example.</p>
+
+<code class="syntax">
+newT.noConflict("safeNewT");
+</code>
+
+        <p>Calling the above will return newT to its original definition,
+before our newT.js script was loaded. Now we can access any newT.js
+methods, like save, in this manner:</p>
+
+<code class="syntax">
+safeNewT.save("my_template", function(data){ 
+    /* return ... */ 
+});
+</code>
+
+
+        <h3>Template Conditionals</h3>
+        <p>While it's definitely possible to use any JavaScript
+        conditional when building newT.js templates, sometimes it's
+        useful to declare when an element should be added in
+        a more newT.js syntax friendly manner, enter newT.js <b>when</b></p>
+<code class="syntax">
+        
+</code>
+
+        <h3>newT.clone</h3>
+        <p>If you want a separate instance of the newT object, perhaps to
+        keep its own template management, call <b>newT.clone</b> and it will
+        return a freshly initialized copy of newT, with a clean template
+        namespace.</p>
+        <code class="syntax">
+var myProjectT = newT.clone();
+myProject.save("project_template", function(data){ 
+    /* return ... */  
+});
+</code>
+<p>Note that <b>myProjectT</b> will not have access to the templates
+saved via <b>newT.save</b> and vice versa.</p>
+
+        <h3>newT.extend</h3>
         <p></p>
+<code class="syntax">
+        
+</code>
+
+        <h3>Rendering Options</h3>
+        <p></p>
+<code class="syntax">
+        
+</code>
+
+
+        <h3>Template Namespace</h3>
+        <p>newT.js makes it easy to access the same template across
+        mutiple functions or files on a page. Since newT.js takes a spot
+        in the global namespace, <b>window.newT</b>, it allows us to
+        create a template in one method, and render it later with
+        dynamic data. This pattern makes it extremely helpful in
+        asynchronous applications.</p>
+        <p>Let's take a look at where templates are stored and how to
+        prevent collisions inside the newT template namespace.</p>
+<code class="syntax">
+        
+</code>
+
+
+
+        <h3>Element Caching</h3>
+        <p>newT.js is smart. It keeps an internal cache of element types
+        it has already attempted to create. This allows newT.js to
+        minimize calls to <b>document.createElement</b>, instead,
+        newT.js calls <b>element.cloneNode</b> when it finds an entry in
+        the internal storage. This lets newT.js get faster as
+        it renders DOM templates. Check out this <a href="http://jsperf.com/createelement-vs-clonenode">performance
+            test</a> for
+        createElement vs cloneNode</p>
+
     </div>
 
+    <div class="display_box">
+        <h2>More Examples</h2>
+        <p>We're just getting started! You can find even more examples in the <a href="https://github.com/jeffreytierney/newT/tree/master/examples">newT.js examples
+            folder</a>. Or, have a look at the <a href="https://github.com/jeffreytierney/newT/blob/master/newT.js">source code</a>. As always
+    feel free to hit us up on Twitter. <a href="http://twitter.com/jeffreytierney">@jeffreytierney</a> and <a
+        href="http://twitter.com/gregory80">@gregory80</a> </p>
+        
 
-        <div>
-            <h2>Using newT.js in Widgets</h2>
-            <p>Of course newT.js can be used in widgets! Why wouldn't
-            it? Check out the obligatory <a
-                href="examples/twitter_wdgt.html">twitter widget</a>. <a
-                href="https://github.com/jeffreytierney/newT/blob/master/examples/twitter_wdgt.html">Grab
-                the code</a>, and try it out.</p>
-        </div>
+    <ul>
+        <li><a href="examples/helloworld.html">Hello World</a></li>
+        <li><a href="examples/top_level.html">No Root Node</a></li>
+        <li><a href="examples/each_render.html">Each Render</a></li>
+        <li><a href="examples/nested_iteration.html">Nested Iteration</a></li>
+        <li><a href="examples/auto_append.html">Auto Append</a></li>
+        <li><a href="examples/xss_defend.html?both=false">Using Safe Mode and
+            XSS Defense</a></li>
 
+    </ul>
 
-        <div>
-            <h2>Building Applications with newT.js</h2>
-            <p>Building full featured JS applications is hard work, but
-            it shouldn't be! Make rendering DOM elements a joy by using
-            newT.js. Flexible and reusable templates are
-            within reach. Check out this  <a
-                href="examples/slideshow_wdgt.html">Cute Kitten
-                Slideshow</a> to see a demo of a more complex
-            application leveraging newT.js. <a
-                href="https://github.com/jeffreytierney/newT/blob/master/examples/slideshow_wdgt.html">Grab the code</a> and give it a try!</p>
-            
-           
-        </div>
-        <div class="display_box">
-            <h2>More Examples</h2>
-            <p>We're just getting started! You can find even more examples in the <a href="https://github.com/jeffreytierney/newT/tree/master/examples">newT.js examples
-                folder</a>. Or, have a look at the <a href="https://github.com/jeffreytierney/newT/blob/master/newT.js">source code</a>. As always
-        feel free to hit us up on Twitter. <a href="http://twitter.com/jeffreytierney">@jeffreytierney</a> and <a
-            href="http://twitter.com/gregory80">@gregory80</a> </p>
-            
+    <p>Or if you are so inclined, you can <a
+        href="/test/test_newt.html">run the unit tests</a> for newT.js
+    yourself.</p>
+    <p>Having an issue? Need an improvement? <a href="https://github.com/jeffreytierney/newT/issues">file on issue</a>.</p>
 
-        <ul>
-            <li><a href="examples/helloworld.html">Hello World</a></li>
-            <li><a href="examples/top_level.html">No Root Node</a></li>
-            <li><a href="examples/each_render.html">Each Render</a></li>
-            <li><a href="examples/nested_iteration.html">Nested Iteration</a></li>
-            <li><a href="examples/auto_append.html">Auto Append</a></li>
-            <li><a href="examples/xss_defend.html?both=false">Using Safe Mode and
-                XSS Defense</a></li>
-
-        </ul>
-
-        <p>Or if you are so inclined, you can <a href="/test/test_newt.html">run the unit tests</a> for newT.js yourself. Having an issue? Need an improvement? <a href="https://github.com/jeffreytierney/newT/issues">file on issue</a>.</p>
-
-        <p><a href="https://github.com/jeffreytierney/newT/zipball/master">Download
-    newT.zip</a> | <a href="https://github.com/jeffreytierney/newT/tarball/master">Download
-    newT.tar.gz </a></p>
+    <p><a href="https://github.com/jeffreytierney/newT/zipball/master">Download
+newT.zip</a> | <a href="https://github.com/jeffreytierney/newT/tarball/master">Download
+newT.tar.gz </a></p>
 
 
-        </div>
-     </div> <!-- end #middle -->
-    <div id="footer">
-        © Copyright 2011. Lovingly crafted in the Greater New York Area. 
     </div>
+ </div> <!-- end #middle -->
+<div id="footer">
+    © Copyright 2011. Lovingly crafted in the Greater New York Area. 
+</div>
         
 </div>
 <!-- fork me -->

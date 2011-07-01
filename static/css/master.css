@@ -26,6 +26,9 @@ a:hover {
 .main_content h2 {
     margin:10px 0 15px;
 }
+.main_content h3 {
+    margin:15px 0 7px;
+}
 #top {
     margin:20px 0px 30px;
 }
