@@ -46,12 +46,24 @@ body {
     margin:5px 0;
     text-decoration:none;
 }
+.tweet_follow {
+    color:#333;
+    text-decoration:none;
+}
+.tweet_follow:hover {
+    text-decoration:underline;
+}
+.tweet_follow_box {
+    margin-top:10px;
+    padding-top:8px;
+    border-top:1px solid #ccc;
+    text-align:center;
+}
 .hr { clear:both; float:none; }
 .hr hr { display:none; }
     </style>
     
 </head>
-
 <body>
    
     <div id="tweets_column">
@@ -59,11 +71,11 @@ body {
     </div>
     <script type="text/javascript" charset="utf-8" src="../newT.js"></script>
     <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="js/newt_twitter.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/tweetT.js"></script>
 
     <script type="text/javascript" charset="utf-8">
         $(function(){
-            newt_twitter.show( $("#tweets_column").get(0), "gregory80", 20 );
+            tweetT.show( $("#tweets_column").get(0), "gregory80", 20 );
                 
         });
     </script>
