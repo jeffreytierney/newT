@@ -80,17 +80,13 @@ injected text for flavor.</p>
             </code>
 
             <p>
-                &lt;sarcasm&gt;Wow, that's a lot of code!&lt;/sarcasm&gt;
-            </p>
-            <p>
-                Well, not really, but let's
-            review what just happened. the <b>newT.save</b> method takes two
+            Let's review what just happened. the <b>newT.save</b> method takes two
             arguments. The first is the name of the template. We can
             reference any newT.js template later using this name. </p>
 
-            <p>The second argument is an anonymous function (you could also use a 
-                previously created named function). we'll use
-            this later to pass in some dynamic data. This
+            <p>The second argument is an anonymous function.  You could also use a 
+                previously created named function. We'll use
+            this function later to pass in some dynamic data. This
             anonymous function will return our hello world template,
             ready for DOM insertion. Here, we are using a simple DIV,
             let's not get too crazy, yet!</p>
@@ -99,7 +95,7 @@ injected text for flavor.</p>
 
         <div id="" class="display_box">
             <h2>Render a newT.js Template</h2>
-            <p>Onto step #3, rendering the cheesy hello world example.</p>
+            <p>Onto step #2, rendering the cheesy hello world example.</p>
 
             <code class="syntax">
 
@@ -149,19 +145,27 @@ world text.</p>
 
 
             </code>
-            <p>* - Note the use of clss instead of class for setting the element's class attribute... 
-                using class as an object key is a no-no in some browsers *cough* IE *cough*, 
-                so newT requires that you use either "clss" or "classname" to set the class attribute</p>
+            <p>Two items to mention</p>
+            <ul>
+                <li>The first argument of any element method,
+                such as <b>newT.div</b>, is an
+                optional attributes object</li>
+                <li>Note the use of <b>clss</b> instead of class to set
+                an element's class name attribute</li>
+            </ul>
 
-            <p>Let's go line by line. Saving a template looks the same,
-            give it a name and a render method. This method needs to
+            <p>Now, let's review. Saving a template looks the same,
+            give it a name and a render method. In this case,
+            <b>my_template</b> and an anonymous function. This method must
             return a DOM element or fragment.</p>
 
-            <p>This return is a little more complex looking, but it's
-            also very simple. Our first element, has a CSS class of
-            "outerdiv". The second argument is the string we want to
-            appear in side the DIV. The 3rd and 4th arguments will be
-            children elements of "outerdiv".</p>
+            <p>The HTML structure is a little more complex in
+            appearance, but it's
+            also very simple. The first element method sets a CSS class of
+            <b>outerdiv</b>. The second argument is the string we want to
+            appear inside this DIV. The 3rd and 4th arguments will be
+            children elements of <b>outerdiv</b>. An example of the HTML
+            output will help clarify.</p>
 
             <code class="syntax">
 <div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;outerdiv&quot;</span><span class="nt">&gt;</span>Hello World!
@@ -175,11 +179,14 @@ world text.</p>
             <a href="https://github.com/jeffreytierney/newT/blob/master/examples/helloworld.html">grab the
                 code</a>.</p>
                 
-                <p>As you see in this example, all element creation methods will take an arbitrary number of parameters,
-                    The first of which can optionally be an object literal that defines all attributes to be added to the element,
-                    and the rest are any number of pieces of content that you want to have added to the elemenet.  These pieces of
-                    content can be text, numbers, dom elements, or any function that will return any of those.  newT is flexible in
-                    what you can give it to render, and will know how to turn that into beautifully crafted html dom elements</p>
+            <p>As you see in this example, <b>newT.div</b> can accept
+            any number of arguments. In the above, the first argument is
+            an object literal, which defines all attributes to be added to
+            the element. All additional arguments become children of
+            this element. These arguments can be any format:  string,
+            number, DOM elements or a function. This pattern syntax can
+            be repeated indefinitely, allowing for robust DOM
+            structures, while being flexible to your development needs.</p>
             
         </div>
 
@@ -189,8 +196,8 @@ world text.</p>
 <p>
     Sometimes we have a situation where we want a template to return multiple nodes, with no individual parent node defined in the template. 
     For example if we are creating a template to replace the items in a list without recreating the list itself. 
-    We can just tell newT.js to return an array, and newT.js will be smart enough to convert the result to a document fragment 
-    allowing you to safely insert the rendered template anywhere you want. Take a look at the below example.
+    We can just tell newT.js to return an array, and newT.js is smart
+    enough to automatically convert the result to a DOM fragment. Take a look at the below example.
 </p>
 
 <code class="syntax">
@@ -220,7 +227,7 @@ world text.</p>
     <h2>Using newT.eachRender and partials</h2>
     <p>Let's face it, looping over lists is a common action, but with newT.js
     building DOM lists can be quick and painless.  Take a look at the
-    eachRender method.</p>
+    <b>newT.eachRender</b> method.</p>
     <code class="syntax">
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">a_list_data</span><span class="o">=</span><span class="p">[{</span>
     <span class="nx">foo</span> <span class="o">:</span> <span class="s2">&quot;one&quot;</span>
@@ -250,16 +257,39 @@ world text.</p>
 </pre></div>
 
     </code>
-    <p>We are going to use two newT templates. "items_list", which is a "partial" that 
-    produces just a list item, and "a_list", which is the parent template that will use eachRender
-    to loop through the data passed in, rendering the partial temple to create a list item element 
-    for each object in the "a_list_data array".</p>
+    <p>We are going to use two newT templates. <b>items_list</b>, which is a partial that 
+    produces just a list item, and <b>a_list</b>, which is the parent
+    template that will use <b>newT.eachRender</b>
+    to loop through the data passed in, rendering the partial template for each object in the <b>a_list_data</b> array.</p>
 
     <p><a href="examples/each_render.html">See the example</a> and
-            <a
-                href="https://github.com/jeffreytierney/newT/blob/master/examples/each_render.html">grab the code</a>.</p>
+    <a href="https://github.com/jeffreytierney/newT/blob/master/examples/each_render.html">grab the code</a>.</p>
 
-</div>
+        </div>
+
+    <div class="display_box">
+        <h2>What else can newT.js do?</h2>
+        <p>No template library would be complete without a little
+        flexiblity. And, no template library would be awesome without a
+        lot of flexibility, newT.js gives you both.</p>
+
+        <p>While a full and complete description of newT.js
+        functionality is best described by the <a href="https://github.com/jeffreytierney/newT/blob/master/newT.js">source code</a>. Let's
+        enumerate a few handy features and review how to leverage them.</p>
+
+        <ol>
+            <li>Safe Mode</li>
+            <li>No Conflict mode</li>
+            <li>Template conditionals</li>
+            <li>newT.extend</li>
+            <li>newT.render options</li>
+            <li>Template namespace</li>
+        </ol>
+
+        <p></p>
+    </div>
+
+
         <div>
             <h2>Using newT.js in Widgets</h2>
             <p>Of course newT.js can be used in widgets! Why wouldn't
@@ -273,8 +303,8 @@ world text.</p>
         <div>
             <h2>Building Applications with newT.js</h2>
             <p>Building full featured JS applications is hard work, but
-            it shouldn't be! newT.js aims to make rendering DOM elements
-            from JavaScript a joy! Flexible and reusable templates are
+            it shouldn't be! Make rendering DOM elements a joy by using
+            newT.js. Flexible and reusable templates are
             within reach. Check out this  <a
                 href="examples/slideshow_wdgt.html">Cute Kitten
                 Slideshow</a> to see a demo of a more complex
