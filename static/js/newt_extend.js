@@ -10,5 +10,5 @@ newT.extend("getGlobalTemplates", function(){
     return this.templates.global || {};
 }, force, add_to_prototype);
 
-newT.showGlobalTemplates();
+newT.getGlobalTemplates();
 

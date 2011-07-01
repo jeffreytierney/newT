@@ -32,9 +32,9 @@
             
             <p>
             newT.js syntax eliminates the tedious closing and balancing of HTML tags  
-            while providing a simple way to create elements and define attributes on them.
-            The source is tiny (4.6KB, less than 2KB gzipped), but it provides you with flexible template
-            options, and is designed to help you build a safer site, arming you 
+            while providing a simple mechanism to create elements and define attributes.
+            The source is tiny, 4.6KB, less than 2KB gzipped! newT.js provides flexible template
+            options, and is designed to help build safer web apps, arming you 
             in the fight against persistent <a href="http://en.wikipedia.org/wiki/Cross-site_scripting" title="XSS on Wikipedia">XSS</a> attacks.
             </p>
 
@@ -299,9 +299,9 @@ world text.</p>
 
     <div class="display_box">
         <h2>What else can newT.js do?</h2>
-        <p>No template library would be complete without a little
-        flexiblity. And, no template library would be awesome without a
-        lot of flexibility, newT.js gives you both.</p>
+        <p>You need a template library that is both secure and flexible, newT.js aims to bring 
+        you both in a tiny package. With powerful methods like <b>newT.extend</b> and a multitide of options, newT.js can build 
+        safe DOM structures you need to build awesome JavaScript applications. </p>
 
         <p>While a full and complete description of newT.js
         functionality is best described by the <a href="https://github.com/jeffreytierney/newT/blob/master/newT.js">source code</a>. Let's
@@ -433,7 +433,7 @@ saved via <b>newT.save</b> and vice versa.</p>
     <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">templates</span><span class="p">.</span><span class="nx">global</span> <span class="o">||</span> <span class="p">{};</span>
 <span class="p">},</span> <span class="nx">force</span><span class="p">,</span> <span class="nx">add_to_prototype</span><span class="p">);</span>
 
-<span class="nx">newT</span><span class="p">.</span><span class="nx">showGlobalTemplates</span><span class="p">();</span>
+<span class="nx">newT</span><span class="p">.</span><span class="nx">getGlobalTemplates</span><span class="p">();</span>
 </pre></div>
 
 
@@ -467,7 +467,7 @@ respectively.</p>
     <span class="nx">el</span> <span class="o">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span>
 <span class="p">});</span>
 
-<span class="c1">// appends &lt;div&gt;start preData pre&lt;/div</span>
+<span class="c1">// appends &lt;div&gt;start preData pre&lt;/div&gt;</span>
 </pre></div>
        
 </code>
@@ -555,7 +555,7 @@ examples.</p>
     <p>Or if you are so inclined, you can <a
         href="/test/test_newt.html">run the unit tests</a> for newT.js
     yourself.</p>
-    <p>Having an issue? Need an improvement? <a href="https://github.com/jeffreytierney/newT/issues">file on issue</a>.</p>
+    <p>Having an issue? Need an improvement? <a href="https://github.com/jeffreytierney/newT/issues">file an issue</a>.</p>
 
     <p><a href="https://github.com/jeffreytierney/newT/zipball/master">Download
 newT.zip</a> | <a href="https://github.com/jeffreytierney/newT/tarball/master">Download
@@ -565,7 +565,7 @@ newT.tar.gz </a></p>
     </div>
  </div> <!-- end #middle -->
 <div id="footer">
-    <div class="footer_txt">© Copyright 2011<br/> Lovingly crafted in the Greater New York Area.
+    <div class="footer_txt">© Copyright 2011<br/><br /> Lovingly crafted in the Greater New York Area.
     This page includes newT.js, interact with it through your JavaScript
     console. </div>
 </div>
