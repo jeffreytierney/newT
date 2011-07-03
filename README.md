@@ -55,4 +55,14 @@ Authors
 [gregory tomlinson](https://twitter.com/gregory80) 
 
 
+Minification
+====
+
+newT.js is compressed with Google Closure Compiler. Visit the Closure Compiler web app <http://closure-compiler.appspot.com/home>
+
+A handy one liner, assuming you have the closure jar file in your bin directory and the CWD is this
+directory
+
+    java -jar ~/bin/closure_compiler.jar --js newT.js  --js_output_file newT.min.js
+
 
