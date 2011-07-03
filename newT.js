@@ -390,6 +390,12 @@
       return this;
     }
   }
-  var _old_newt = window[temp], _temp, _last_name = temp;
-  window[temp] = _temp = new T();
+  
+  if (typeof module !== "undefined" && module.exports != null) {
+    module.exports = new T();
+  } else {
+    var _old_newt = window[temp], _temp, _last_name = temp;
+    window[temp] = _temp = new T();
+  }
+  
 })();
