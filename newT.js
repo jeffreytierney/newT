@@ -345,8 +345,8 @@
     },
     // If you want another separate instance of newT, perhaps to keep its own template management
     // call newT.clone() and it will return another freshly initialized copy (with a clear templates object)
-    clone: function() {
-      return new T();
+    clone: function(options) {
+      return new T(options);
     },
     // want to write plugin elements that can do more than just render dom elements?
     // such as dom elements that have some extra processing or ajax requests related to their rendering
