@@ -76,7 +76,7 @@
   
   T.prototype = {
     constructor: T.prototype.constructor,
-    version : "1.1.1.1",
+    version : "1.1.1.2",
     init: function(options) {
       this.options = {
         if_attr: "when",
