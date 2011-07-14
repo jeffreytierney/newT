@@ -129,8 +129,8 @@ world text.</p>
             <code class="syntax">
 <div class="highlight"><pre><span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;my_template&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">t_data</span><span class="p">){</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">({</span><span class="nx">clss</span> <span class="o">:</span> <span class="s2">&quot;outerdiv&quot;</span> <span class="p">},</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">,</span> 
-            <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">(</span> <span class="p">{</span><span class="nx">clss</span> <span class="o">:</span> <span class="s2">&quot;innerdiv1&quot;</span> <span class="p">},</span> <span class="nx">t_data</span><span class="p">.</span><span class="nx">foo</span> <span class="p">),</span> 
+        <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">({</span><span class="nx">classname</span> <span class="o">:</span> <span class="s2">&quot;outerdiv&quot;</span> <span class="p">},</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">,</span> 
+            <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">(</span> <span class="p">{</span><span class="nx">classname</span> <span class="o">:</span> <span class="s2">&quot;innerdiv1&quot;</span> <span class="p">},</span> <span class="nx">t_data</span><span class="p">.</span><span class="nx">foo</span> <span class="p">),</span> 
             <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">(</span> <span class="nx">t_data</span><span class="p">.</span><span class="nx">bar</span> <span class="p">)</span>
         <span class="p">)</span>
     <span class="p">)</span>
@@ -150,7 +150,7 @@ world text.</p>
                 <li>The first argument of any element method,
                 such as <b>newT.div</b>, is an
                 optional attributes object</li>
-                <li>Note the use of <b>clss</b> instead of class to set
+                <li>Note the use of <b>classname</b> instead of class to set
                 an element's class name attribute</li>
             </ul>
 
@@ -247,7 +247,7 @@ world text.</p>
 <span class="p">});</span>
 
 <span class="nx">newT</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s2">&quot;a_list&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-    <span class="k">return</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">ul</span><span class="p">(</span> <span class="p">{</span><span class="nx">clss</span> <span class="o">:</span> <span class="s2">&quot;a_list_class&quot;</span><span class="p">},</span>
+    <span class="k">return</span> <span class="nx">newT</span><span class="p">.</span><span class="nx">ul</span><span class="p">(</span> <span class="p">{</span><span class="nx">classname</span> <span class="o">:</span> <span class="s2">&quot;a_list_class&quot;</span><span class="p">},</span>
         <span class="nx">newT</span><span class="p">.</span><span class="nx">eachRender</span><span class="p">(</span> <span class="nx">data</span><span class="p">,</span> <span class="s2">&quot;items_list&quot;</span><span class="p">)</span>
     <span class="p">)</span>
 <span class="p">});</span>
@@ -373,11 +373,11 @@ methods, like save, in this manner:</p>
     <span class="k">return</span> <span class="p">(</span>
         <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">({</span>
             <span class="nx">when</span> <span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">shown</span><span class="p">,</span> 
-            <span class="nx">clss</span> <span class="o">:</span> <span class="s2">&quot;shown&quot;</span>
+            <span class="nx">classname</span> <span class="o">:</span> <span class="s2">&quot;shown&quot;</span>
         <span class="p">},</span> <span class="s2">&quot;show me&quot;</span><span class="p">,</span> 
             <span class="nx">newT</span><span class="p">.</span><span class="nx">div</span><span class="p">({</span> 
                 <span class="nx">when</span> <span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">hidden</span><span class="p">,</span> 
-                <span class="nx">clss</span> <span class="o">:</span> <span class="s2">&quot;hidden&quot;</span>
+                <span class="nx">classname</span> <span class="o">:</span> <span class="s2">&quot;hidden&quot;</span>
             <span class="p">},</span> <span class="s2">&quot;hide me&quot;</span><span class="p">)</span>
         <span class="p">)</span>
     <span class="p">)</span>
