@@ -661,3 +661,36 @@ test("addEls as array", function() {
   delete newT.constructor.prototype["extra2"];
   
 });
+
+
+
+/*********************************************/
+/*
+*
+*   Error Test Cases
+*
+*
+* */
+test("Issue #9 No root Node Causes DOM Exception", function() {
+    expect(3);
+    newT.save("temp_issue9", function(data) {
+        return ([
+            newT.span({when:data.off||false}, ""),
+            newT.span("My Text")
+
+        ]);
+    });
+    var frag;
+    try {
+        // setting "off" to true will stop this error
+        frag=newT.render("temp_issue9", { off:false });
+    } catch(e){
+        ok(false,  e);
+        console.log("Error",e);
+    }
+    ok( frag instanceof DocumentFragment, "Frag is an actual Document Fragment" );
+    ok( frag, "Document Frament Exists" );
+    ok(typeof frag === "object", "Frag is an object");
+
+});
+
