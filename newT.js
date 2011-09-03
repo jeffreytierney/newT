@@ -391,6 +391,7 @@
     },
     setDocument:function(_doc) {
       // Set the 'document' object with DOM method access
+      this.resetCache();
       doc=_doc;
       return this;
     },
@@ -420,6 +421,7 @@
   function dEl( name ) {
     return doc.createElement(name);
   }
+
   if (typeof module !== "undefined" && module.exports != null) {
     module.exports = new T();
   } else {
