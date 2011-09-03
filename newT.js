@@ -129,7 +129,7 @@
       new_el = this.templates[ns][name](opts.data, opts._i, opts._idx);
       if(typeof new_el === "object" && new_el.length > 0) {
         _new_el=new_el;
-        new_el=document.createDocumentFragment();
+        new_el=dFrag();
         for(i in _new_el) {
             new_el.appendChild( _new_el[i] );
         }
@@ -151,7 +151,7 @@
       opts = opts || {};
       delete opts.el;
       
-      var el = document.createElement("div");
+      var el = dEl("div");
       el.appendChild(this.render(name, data, opts));
       
       return el.innerHTML;
@@ -164,7 +164,7 @@
       // dont set cur_options here because that happens in render
       opts = opts || {};
       if(!this.checkRender(opts)) { return ""; }
-      var frag = document.createDocumentFragment(), idx=0, i;
+      var frag = dFrag(), idx=0, i;
       opts.el = frag;
       for(i in data) {
         if(data.hasOwnProperty(i)) {
@@ -183,7 +183,7 @@
       opts = opts || {};
       if(!this.checkRender(opts)) { return ""; }
       this.cur_options = opts;
-      var frag = document.createDocumentFragment(), child, idx=0, i;
+      var frag = dFrag(), child, idx=0, i;
       for(i in data) {
         if(data.hasOwnProperty(i)) {
           child = func(data[i], i, idx);
@@ -218,7 +218,7 @@
     },
     _createEl: function(type) {
       if (type in el_cache && el_cache[type].cloneNode) { return el_cache[type].cloneNode(false);}
-      el_cache[type] = document.createElement(type);
+      el_cache[type] = dEl(type);
       return el_cache[type].cloneNode(false);
     },
     // generic version of the function used to build the element specific creation functions
@@ -230,7 +230,7 @@
     //                       can be strings, domElements, or anything that evaluates to either of those
     element: function(type, attributes, content) {
       var args = slice.call(arguments, 1),
-          el = (type==="frag" ? document.createDocumentFragment() : this._createEl(type));
+          el = (type==="frag" ? dFrag() : this._createEl(type));
       if(args.length) {
         content = args;
       }
@@ -293,7 +293,7 @@
           break;
           
           case "number":
-            el.appendChild(document.createTextNode(c));
+            el.appendChild(dText(c));
           break;
           case "function":
             var result = c();
@@ -307,7 +307,7 @@
           case "undefined":
           break;
           default:
-            try{ el.appendChild(c); } catch(ex) { el.appendChild(document.createTextNode(c)); }
+            try{ el.appendChild(c); } catch(ex) { el.appendChild(dText(c)); }
           break;
         
         }
@@ -319,7 +319,7 @@
         el.innerHTML = text;
       }
       else {
-        el.appendChild(document.createTextNode(text));
+        el.appendChild(dText(text));
       }
       return this;
     },
@@ -389,17 +389,44 @@
       _last_name = new_name;
       return this;
     },
-    setDocument:function(doc) {
+    setDocument:function(_doc) {
       // Set the 'document' object with DOM method access
-      document=doc;
+      doc=_doc;
+      return this;
+    },
+    resetCache:function() {
+      // in nodejs, b/c the DOC root changes between requests
+      //  the el_cache needs to be purged
+      //  else this will throw an error.
+      //  throw new core.DOMException(WRONG_DOCUMENT_ERR);
+      //  lib/jsdom/level1/core.js:462:13
+      el_cache={};
     }
   }
   
+  /*
+  * nodejs JSDOM compatability
+  *
+  *
+  * */
+  // Document Specific Methods
+  var doc;
+  function dFrag() {
+    return doc.createDocumentFragment();
+  }
+  function dText(txt) {
+    return doc.createTextNode( txt );
+  }
+  function dEl( name ) {
+    return doc.createElement(name);
+  }
   if (typeof module !== "undefined" && module.exports != null) {
     module.exports = new T();
   } else {
     var _old_newt = window[temp], _temp, _last_name = temp;
     window[temp] = _temp = new T();
+    window[temp].setDocument(window.document);
+
   }
   
 })();

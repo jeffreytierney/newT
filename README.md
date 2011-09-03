@@ -66,3 +66,14 @@ directory
     java -jar ~/bin/closure_compiler.jar --js newT.js  --js_output_file newT.min.js
 
 
+
+
+Changelog
+=====
+
+-1.1.1.3
+Add (slightly) improved support for nodejs via jsdom compatability.
+
+-1.1
+Add noConflict mode
+

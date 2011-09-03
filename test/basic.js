@@ -662,7 +662,20 @@ test("addEls as array", function() {
   
 });
 
+test("newT.setDocument Test", function() {
+  expect(3);
+  var params={};
+  same( newT.setDocument(params), newT, "set document retunns newT instance for chaining");
+  var el;
+  try {
+    el = newT.div("foo");
+  } catch(e) {
+    ok(e.type, "undefined_method", "expect DOM error for setDocument(null)");
+    //console.log(e, "found");
+  }
+  same( newT.setDocument(window.document), newT, "return valid document");
 
+})
 
 /*********************************************/
 /*
