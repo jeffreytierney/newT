@@ -66,7 +66,7 @@
   // can be overridden by passing something different
   // into the self executing wrapper function
   temp = temp || "newT";
-  
+
   // internally refer to it as T for brevity sake
   var T = function(options) {
     this.init(options || {});
@@ -288,27 +288,27 @@
         // unless (for now) there are html tags or entities in it... then just innerHTML it
         c = content[i];
         switch(typeof c) {
-            case "string":
-                this.addText(el, c, _local_safe_mode);
-            break;
-            
-            case "number":
-                el.appendChild(document.createTextNode(c));
-            break;
-            case "function":
-                var result = c();
-                if(typeof result == "string") {
-                  this.addText(el, result, _local_safe_mode);
-                }
-                else {
-                  el.appendChild(result);
-                }
-            break;
-            case "undefined":
-                break;
-            default:
-                try{ el.appendChild(c); } catch(ex) { el.appendChild(document.createTextNode(c)); }
-            break;
+          case "string":
+            this.addText(el, c, _local_safe_mode);
+          break;
+          
+          case "number":
+            el.appendChild(document.createTextNode(c));
+          break;
+          case "function":
+            var result = c();
+            if(typeof result == "string") {
+              this.addText(el, result, _local_safe_mode);
+            }
+            else {
+              el.appendChild(result);
+            }
+          break;
+          case "undefined":
+          break;
+          default:
+            try{ el.appendChild(c); } catch(ex) { el.appendChild(document.createTextNode(c)); }
+          break;
         
         }
       }
@@ -371,9 +371,9 @@
       var _this = this, args, p_elem=T.prototype.element;
       for(var i=0, len=els.length; i<len; i++) (function(el) {
         _this.extend(el, function() {
-              args = slice.call(arguments);
-              args.unshift(el);
-              return p_elem.apply(_this, args);
+          args = slice.call(arguments);
+          args.unshift(el);
+          return p_elem.apply(_this, args);
         }, force, local);
       })(els[i]);
 
@@ -388,6 +388,10 @@
       window[new_name] = _temp;
       _last_name = new_name;
       return this;
+    },
+    setDocument:function(doc) {
+      // Set the 'document' object with DOM method access
+      document=doc;
     }
   }
   
