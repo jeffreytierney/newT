@@ -368,13 +368,13 @@
     },
     addEls: function(els, force, local) {
       if(typeof els === "string") { els = els.split(" "); }
-      for(var i=0, len=els.length; i<len; i++) (function(el, _this, p_elem, _force, _local) {
+      for(var i=0, len=els.length; i<len; i++) (function(el, _this, _force, _local) {
         _this.extend(el, function() {
           var args = slice.call(arguments);
           args.unshift(el);
-          return p_elem.apply(_this, args);
+          return T.prototype.element.apply(_this, args);
         }, _force, _local);
-      })(els[i], this, T.prototype.element, force, local);
+      })(els[i], this, force, local);
       return this;
     },
     noConflict: function(new_name) {
