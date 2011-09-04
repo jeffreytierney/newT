@@ -76,7 +76,7 @@
   
   T.prototype = {
     constructor: T.prototype.constructor,
-    version : "1.1.3",
+    version : "1.1.4",
     init: function(options) {
       this.options = {
         if_attr: "when",
@@ -368,17 +368,14 @@
     },
     addEls: function(els, force, local) {
       if(typeof els === "string") { els = els.split(" "); }
-      var _this = this, args, p_elem=T.prototype.element;
-      for(var i=0, len=els.length; i<len; i++) (function(el) {
+      for(var i=0, len=els.length; i<len; i++) (function(el, _this, p_elem, _force, _local) {
+        var args;
         _this.extend(el, function() {
           args = slice.call(arguments);
           args.unshift(el);
           return p_elem.apply(_this, args);
-        }, force, local);
-      })(els[i]);
-
-      _this=null;
-
+        }, _force, _local);
+      })(els[i], this, T.prototype.element, force, local);
       return this;
     },
     noConflict: function(new_name) {
@@ -402,6 +399,7 @@
       //  throw new core.DOMException(WRONG_DOCUMENT_ERR);
       //  lib/jsdom/level1/core.js:462:13
       el_cache={};
+      return this;
     }
   }
   
@@ -421,6 +419,7 @@
   function dEl( name ) {
     return doc.createElement(name);
   }
+
   if (typeof module !== "undefined" && module.exports != null) {
     module.exports = new T();
   } else {

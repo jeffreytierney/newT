@@ -77,6 +77,8 @@ Using NPM to link newT
     npm link ../newT
 
 
+Setting up a JSDOM window to use with newT
+
     var jsdom=require('jsdom');
     var doc=jsdom.jsdom('<html><head></head><body></body></html>');
     var window=doc.createWindow();
@@ -87,9 +89,23 @@ Using NPM to link newT
     window.document.body.appendChild( newT.div("yey! works" ) );
 
 
+Updating newtjs.org
+=====
+
+Ensure most recent version is compiled
+
+    git clone git://github.com/jeffreytierney/newT.git
+    git branch gh-pages
+    git pull origin gh-pages
+    git pull origin master # get the latest
+
+    git push origin gh-pages
 
 Changelog
 =====
+
+-1.1.3
+Change the version number
 
 -1.1.1.3
 Add (slightly) improved support for nodejs via jsdom compatability.
