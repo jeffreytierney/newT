@@ -76,7 +76,7 @@
   
   T.prototype = {
     constructor: T.prototype.constructor,
-    version : "1.1.4",
+    version : "1.2.1",
     init: function(options) {
       this.options = {
         if_attr: "when",
@@ -160,7 +160,7 @@
     // function to iterate over a collection and render a previously saved template
     // for each item in the collection
     // uses a document fragment to collect each element and pass it back
-    eachRender: function(data, template_name, opts) {
+    eachRender: function(name, data, opts) {
       // dont set cur_options here because that happens in render
       opts = opts || {};
       if(!this.checkRender(opts)) { return ""; }
@@ -170,7 +170,7 @@
         if(data.hasOwnProperty(i)) {
           opts["_i"] = i;
           opts["_idx"] = idx++;
-          this.render(template_name, data[i], opts);
+          this.render(name, data[i], opts);
         }
       }
       opts=null;

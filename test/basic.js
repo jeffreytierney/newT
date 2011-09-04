@@ -263,12 +263,12 @@ test("when as option in looping constructs (eachRender)", function() {
   var arr = [1,2,3];
   
   var ul = newT.ul(
-    newT.eachRender(arr, "li_example", {when:arr.length > 5})
+    newT.eachRender( "li_example", arr, {when:arr.length > 5})
   );
   equals(ul.constructor, document.createElement("ul").constructor, "ul should be a ul because the when test passes");
 
   var ul = newT.ul(
-    newT.eachRender(arr, "li_example", {when:arr.length > 0})
+    newT.eachRender("li_example", arr, {when:arr.length > 0})
   );
   
   equals(ul.childNodes.length, arr.length, "ul should have one child node for each element in the array");
@@ -358,7 +358,7 @@ test("eachRender", function() {
   newT.save("each_render_example_array", function(data) {
     return (
       newT.ul(
-        newT.eachRender(data, "each_render_example_array_li")
+        newT.eachRender( "each_render_example_array_li", data)
       )
     )
   });
@@ -385,7 +385,7 @@ test("eachRender", function() {
   newT.save("each_render_example_object", function(data) {
     return (
       newT.ul(
-        newT.eachRender(data, "each_render_example_object_li")
+        newT.eachRender( "each_render_example_object_li", data )
       )
     )
   });
