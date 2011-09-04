@@ -67,6 +67,26 @@ directory
 
 
 
+Bootstapping with Nodejs & JSDOM
+=====
+
+Using NPM to link newT
+
+    git clone https://gregory80@github.com/jeffreytierney/newT.git
+    cd newT
+    npm link ../newT
+
+
+    var jsdom=require('jsdom');
+    var doc=jsdom.jsdom('<html><head></head><body></body></html>');
+    var window=doc.createWindow();
+
+    newT.setDocument(window); 
+    // set this again in the Document ROOT changes
+    
+    window.document.body.appendChild( newT.div("yey! works" ) );
+
+
 
 Changelog
 =====

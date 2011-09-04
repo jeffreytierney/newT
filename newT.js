@@ -76,7 +76,7 @@
   
   T.prototype = {
     constructor: T.prototype.constructor,
-    version : "1.1.1.3",
+    version : "1.1.3",
     init: function(options) {
       this.options = {
         if_attr: "when",
@@ -144,7 +144,7 @@
       if (opts.post) { opts.post.call(opts.scope, new_el, opts.data); }
       
       this.cur_options = null;
-      delete opts;
+      opts=null;
       return new_el;
     },
     renderToString: function(name, data, opts) {
@@ -173,7 +173,7 @@
           this.render(template_name, data[i], opts);
         }
       }
-      delete opts;
+      opts=null;
       return frag;
     },
     // more free form iterator function that allows passing an ad-hoc
@@ -377,7 +377,7 @@
         }, force, local);
       })(els[i]);
 
-      delete _this;
+      _this=null;
 
       return this;
     },
@@ -421,14 +421,12 @@
   function dEl( name ) {
     return doc.createElement(name);
   }
-
   if (typeof module !== "undefined" && module.exports != null) {
     module.exports = new T();
   } else {
     var _old_newt = window[temp], _temp, _last_name = temp;
     window[temp] = _temp = new T();
     window[temp].setDocument(window.document);
-
   }
   
 })();
