@@ -369,9 +369,8 @@
     addEls: function(els, force, local) {
       if(typeof els === "string") { els = els.split(" "); }
       for(var i=0, len=els.length; i<len; i++) (function(el, _this, p_elem, _force, _local) {
-        var args;
         _this.extend(el, function() {
-          args = slice.call(arguments);
+          var args = slice.call(arguments);
           args.unshift(el);
           return p_elem.apply(_this, args);
         }, _force, _local);
@@ -421,6 +420,8 @@
   }
 
   if (typeof module !== "undefined" && module.exports != null) {
+    // require('newT') will result in a single reference in memory
+    // templates can be shared across files
     module.exports = new T();
   } else {
     var _old_newt = window[temp], _temp, _last_name = temp;
