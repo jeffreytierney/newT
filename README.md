@@ -95,7 +95,7 @@ Updating newtjs.org
 Ensure most recent version is compiled
 
     git clone git://github.com/jeffreytierney/newT.git
-    git branch gh-pages
+    git checkout gh-pages
     git pull origin gh-pages
     git pull origin master # get the latest
 
