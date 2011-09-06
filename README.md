@@ -72,7 +72,7 @@ Bootstapping with Nodejs & JSDOM
 
 Using NPM to link newT
 
-    git clone https://gregory80@github.com/jeffreytierney/newT.git
+    git clone git://github.com/jeffreytierney/newT.git
     cd newT
     npm link ../newT
 
@@ -94,7 +94,7 @@ Updating newtjs.org
 
 Ensure most recent version is compiled
 
-    git clone git://github.com/jeffreytierney/newT.git
+    git clone git://<user>@github.com/jeffreytierney/newT.git
     git checkout gh-pages
     git pull origin gh-pages
     git pull origin master # get the latest
