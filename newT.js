@@ -76,7 +76,7 @@
   
   T.prototype = {
     constructor: T.prototype.constructor,
-    version : "1.1.2",
+    version : "1.1.3",
     init: function(options) {
       this.options = {
         if_attr: "when",
@@ -103,15 +103,21 @@
     // create the elements for the template
     // and if an exisiting root el was passed in, append it to that root
     // either way, return the newly created element(s)
+    // name === template name || function (anonymous?)
     render: function(name, data, opts) {
-      var name_parts = name.split("."),
-          ns = "global",
-          new_el,
-          ret,
-          _new_el, i;
-      name = name_parts[0];
-      if(name_parts.length > 1) {
-        ns = name_parts[1];
+      var ns = "global",
+          new_el, ret,
+          _new_el, i, name_parts, func;
+
+      if(typeof name !== "function") {
+        name_parts = name.split(".");
+        name = name_parts[0];
+        if(name_parts.length > 1) {
+          ns = name_parts[1];
+        }
+        func=this.templates[ns][name]
+      } else {
+        func=name;
       }
       
       opts = opts || {};
@@ -126,7 +132,7 @@
       
       this.cur_options = opts;
       
-      new_el = this.templates[ns][name](opts.data, opts._i, opts._idx);
+      new_el = func(opts.data, opts._i, opts._idx);
       if(typeof new_el === "object" && new_el.constructor === [].constructor) {
         _new_el=new_el;
         new_el=document.createDocumentFragment();

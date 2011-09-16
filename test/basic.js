@@ -661,3 +661,15 @@ test("addEls as array", function() {
   delete newT.constructor.prototype["extra2"];
   
 });
+
+test("use anon function newT.render", function() {
+    var text_value="__FOO__TEST__ANON"
+    var div = newT.render(function(data){
+        return newT.div( data.text )
+    }, {
+        text: text_value
+    })
+    expect(2);
+    ok(div.constructor === document.createElement("div").constructor, "div contructor");
+    ok(div.innerHTML === text_value, "data added correctly via anon func");
+})
