@@ -76,7 +76,7 @@
   
   T.prototype = {
     constructor: T.prototype.constructor,
-    version : "1.1.1.2",
+    version : "1.1.2",
     init: function(options) {
       this.options = {
         if_attr: "when",
@@ -127,7 +127,7 @@
       this.cur_options = opts;
       
       new_el = this.templates[ns][name](opts.data, opts._i, opts._idx);
-      if(typeof new_el === "object" && new_el.length > 0) {
+      if(typeof new_el === "object" && new_el.constructor === [].constructor) {
         _new_el=new_el;
         new_el=document.createDocumentFragment();
         for(i in _new_el) {
