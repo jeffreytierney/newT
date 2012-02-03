@@ -76,7 +76,7 @@
   
   T.prototype = {
     constructor: T.prototype.constructor,
-    version : "1.1.1.1",
+    version : "1.1.2",
     init: function(options) {
       this.options = {
         if_attr: "when",
@@ -127,7 +127,7 @@
       this.cur_options = opts;
       
       new_el = this.templates[ns][name](opts.data, opts._i, opts._idx);
-      if(typeof new_el === "object" && new_el.length > 0) {
+      if(typeof new_el === "object" && new_el.constructor === [].constructor) {
         _new_el=new_el;
         new_el=document.createDocumentFragment();
         for(i in _new_el) {
@@ -345,8 +345,8 @@
     },
     // If you want another separate instance of newT, perhaps to keep its own template management
     // call newT.clone() and it will return another freshly initialized copy (with a clear templates object)
-    clone: function() {
-      return new T();
+    clone: function(options) {
+      return new T(options);
     },
     // want to write plugin elements that can do more than just render dom elements?
     // such as dom elements that have some extra processing or ajax requests related to their rendering
